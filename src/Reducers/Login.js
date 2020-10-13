@@ -4,16 +4,23 @@ import {
     LOGIN_PASSWORD_CHANGED,
     LOGIN_SUBMIT,
     LOGIN_SUBMIT_FAILED,
-    LOGIN_SUBMIT_SUCCESS
+    LOGIN_SUBMIT_SUCCESS,
+    LOGOUT,
+    REFRESH_LOGIN,
+    REFRESH_LOGIN_FAILURE,
+    REFRESH_LOGIN_SUCCESS
 } from '../Types';
 
 const intitialState = {
     authenticated: localStorage.getItem('accessToken') || false,
     accessToken: localStorage.getItem('accessToken') || EMPTY_STRING,
     refreshToken: localStorage.getItem('refreshToken') || EMPTY_STRING,
+    expiresAt: localStorage.getItem('expiresAt') || 0,
+    refreshBy: localStorage.getItem('refreshBy') || 0,
     email: EMPTY_STRING,
     password: EMPTY_STRING,
     loading: false,
+    refreshing: false,
     errorExists: false,
     statusMessage: EMPTY_STRING,
     errors: {
@@ -62,7 +69,37 @@ export default (state=intitialState, action) => {
                 errors: intitialState.errors,
                 authenticated: true,
                 accessToken: action.payload.accessToken,
-                refreshToken: action.payload.refreshToken
+                refreshToken: action.payload.refreshToken,
+                expiresAt: action.payload.expiresAt,
+                refreshBy: action.payload.refreshBy,
+                email: EMPTY_STRING,
+                password: EMPTY_STRING
+            }
+        case LOGOUT:
+            return{
+                ...state,
+                authenticated: false,
+                email: EMPTY_STRING,
+                password: EMPTY_STRING
+            }
+        case REFRESH_LOGIN:
+            return{
+                ...state,
+                refreshing: true
+            }
+        case REFRESH_LOGIN_FAILURE:
+            return{
+                ...state,
+                refreshing: false,
+                statusMessage: action.payload.statusMessage
+            }
+        case REFRESH_LOGIN_SUCCESS:
+            return{
+                ...state,
+                expiresAt: action.payload.expiresAt,
+                refreshBy: action.payload.refreshBy,
+                refreshToken: action.payload.refreshToken,
+                accessToken: action.payload.accessToken
             }
         default: return state
     }

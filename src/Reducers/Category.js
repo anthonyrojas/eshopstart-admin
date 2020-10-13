@@ -14,11 +14,10 @@ import {
     UPDATE_CATEGORY,
     UPDATE_CATEGORY_FAILURE,
     UPDATE_CATEGORY_SUCCESS,
-    CATEGORY_NAME_CHANGED
+    CATEGORY_NAME_CHANGED, EDIT_CATEGORY, CANCEL_EDIT_CATEGORY
 }
 from '../Types';
 import {
-    EMPTY_ARRAY,
     EMPTY_STRING
 } from '../constants';
 const initialState = {
@@ -33,7 +32,8 @@ const initialState = {
         name: EMPTY_STRING
     },
     errorExists: false,
-    statusMessage: EMPTY_STRING
+    statusMessage: EMPTY_STRING,
+    editing: false
 }
 
 export default (state = initialState, action) => {
@@ -41,7 +41,11 @@ export default (state = initialState, action) => {
         case CATEGORY_NAME_CHANGED:
             return{
                 ...state,
-                name: action.payload
+                name: action.payload,
+                errors: {
+                    ...state.errors,
+                    name: EMPTY_STRING
+                }
             }
         case ADD_CATEGORY:
             return {
@@ -67,7 +71,8 @@ export default (state = initialState, action) => {
                 errors: initialState.errors,
                 name: EMPTY_STRING,
                 errorExists: false,
-                statusMessage: action.payload.statusMessage
+                statusMessage: action.payload.statusMessage,
+                categories: [...state.categories, action.payload.category]
             }
         case DELETE_CATEGORY:
             return{
@@ -172,7 +177,23 @@ export default (state = initialState, action) => {
                 errors: initialState.errors,
                 categories: uCategories,
                 statusMessage: action.payload.statusMessage,
-                name: EMPTY_STRING
+                name: EMPTY_STRING,
+                editing: false,
+                category: EMPTY_STRING
+            }
+        case EDIT_CATEGORY:
+            return{
+                ...state,
+                editing: true,
+                name: action.payload.name,
+                category: action.payload
+            }
+        case CANCEL_EDIT_CATEGORY:
+            return{
+                ...state,
+                editing: false,
+                name: EMPTY_STRING,
+                category: EMPTY_STRING
             }
         default: return state
     }

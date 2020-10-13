@@ -1,28 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import SiteBar from './SiteBar';
-import Navigation from './NavMenu/Navigation';
+import {Switch} from 'react-router-dom';
 import Login from './Login/Login';
-import Main from './Main';
+import PrivateRoute from './PrivateRoute';
+import PublicRoute from './PublicRoute';
+import Category from './Category/Category';
 
 class Layout extends Component {
     render() {
         return (
-            <React.Fragment>
-                {
-                    this.props.authenticated ?
-                    <React.Fragment>
-                        <SiteBar />
-                        <Navigation />
-                        <Main />
-                    </React.Fragment>
-                    :
-                    <React.Fragment>
-                        <SiteBar />
-                        <Login />
-                    </React.Fragment>
-                }
-            </React.Fragment>
+            <Switch>
+                <PrivateRoute exact path='/' component={Category} />
+                <PublicRoute path='/login' component={Login} />
+            </Switch>
         )
     }
 }

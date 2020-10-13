@@ -14,7 +14,9 @@ import {
     UPDATE_CATEGORY,
     UPDATE_CATEGORY_FAILURE,
     UPDATE_CATEGORY_SUCCESS,
-    CATEGORY_NAME_CHANGED
+    CATEGORY_NAME_CHANGED,
+    EDIT_CATEGORY,
+    CANCEL_EDIT_CATEGORY
 }
 from '../Types';
 import client from '../axiosClient';
@@ -145,4 +147,18 @@ export const updateCategory = (data) => {
             })
         }
     }
+}
+
+export const editCategory = (data) => {
+    return({
+        type: EDIT_CATEGORY,
+        payload: data
+    })
+}
+
+export const cancelEditCategory = () => {
+    return({
+        type: CANCEL_EDIT_CATEGORY,
+        payload: false
+    })
 }

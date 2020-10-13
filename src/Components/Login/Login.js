@@ -10,7 +10,6 @@ import Container from '@material-ui/core/Container';
 import EmailInput from './EmailInput';
 import PasswordInput from './PasswordInput';
 import {withStyles} from '@material-ui/core';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
@@ -19,10 +18,6 @@ const styles = theme => ({
     },
     buttonContainer: {
         textAlign: 'center'
-    },
-    content:{
-        flexGrow: 1,
-        padding: theme.spacing(3)
     }
 })
 
@@ -37,44 +32,41 @@ class Login extends Component {
     render() {
         const {classes} = this.props;
         return (
-            <main className={classes.content}>
-                <Toolbar />
-                <Container maxWidth='md'>
-                    <Paper 
-                        className={classes.paper}
-                        elevation={4}
+            <Container maxWidth='md'>
+                <Paper 
+                    className={classes.paper}
+                    elevation={4}
+                >
+                    <Grid container
+                        direction='row'
+                        spacing={4}
+                        alignContent='center'
+                        justify='center'
+                        alignItems='center'
+                        component='form'
                     >
-                        <Grid container
-                            direction='row'
-                            spacing={2}
-                            alignContent='center'
-                            justify='center'
-                            alignItems='center'
-                            component='form'
-                        >
-                            <Grid item xs={12}>
-                                <Typography variant='h4' align='center'>Login</Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <EmailInput />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <PasswordInput />
-                            </Grid>
-                            <Grid item xs={12} className={classes.buttonContainer}>
-                                <Button
-                                    variant='contained'
-                                    type='submit'
-                                    color='primary'
-                                    onClick={this.handleSubmit.bind(this)}
-                                >
-                                    Login
-                                </Button>
-                            </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant='h4' align='center'>Login</Typography>
                         </Grid>
-                    </Paper>
-                </Container>
-            </main>
+                        <Grid item xs={12}>
+                            <EmailInput />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <PasswordInput />
+                        </Grid>
+                        <Grid item xs={12} className={classes.buttonContainer}>
+                            <Button
+                                variant='contained'
+                                type='submit'
+                                color='primary'
+                                onClick={this.handleSubmit.bind(this)}
+                            >
+                                Login
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Paper>
+            </Container>
         )
     }
 }

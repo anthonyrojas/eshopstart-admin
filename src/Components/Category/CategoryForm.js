@@ -6,7 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import {connect} from 'react-redux';
 import {
     addCategory,
-    updateCategory
+    updateCategory,
+    cancelEditCategory
 } from '../../Actions';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -18,21 +19,31 @@ const styles = theme => ({
     },
     buttonContainer: {
         textAlign: 'center'
+    },
+    centerAlign: {
+        textAlign: 'center'
     }
 })
 
 class CategoryForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.addCategory({
-            name: this.props.name
-        });
+        if(this.props.editing){
+            this.props.updateCategory({
+                id: this.props.category.id,
+                name: this.props.name
+            })
+        }else{
+            this.props.addCategory({
+                name: this.props.name
+            });
+        }
     }
     render() {
         const {classes} = this.props;
         const loadingIndicator = (
-            this.props.loading ? 
-            <Grid item xs={12}>
+            this.props.loading || this.props.loadingUpdate ? 
+            <Grid item xs={12} className={classes.centerAlign}>
                 <CircularProgress />
             </Grid>
             :
@@ -57,7 +68,12 @@ class CategoryForm extends Component {
                             align='center' 
                             variant='h5'
                         >
-                            Add Category
+                            {
+                                this.props.editing ?
+                                <React.Fragment>Update Category</React.Fragment>
+                                :
+                                <React.Fragment>Add Category</React.Fragment>
+                            }
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
@@ -68,11 +84,32 @@ class CategoryForm extends Component {
                             variant='contained'
                             color='primary'
                             type='submit'
-                            disabled={this.props.loading}
+                            disabled={this.props.loading || this.props.loadingUpdate}
                             onClick={this.handleSubmit.bind(this)}
                         >
-                            Add
+                            {
+                                this.props.editing ? 
+                                <React.Fragment>Update</React.Fragment>
+                                :
+                                <React.Fragment>Add</React.Fragment>
+                            }
                         </Button>
+                        {
+                            this.props.editing ?
+                            <React.Fragment>
+                                &nbsp;
+                                <Button
+                                    variant='contained'
+                                    color='secondary'
+                                    disabled={this.props.loadingUpdate}
+                                    onClick={e => this.props.cancelEditCategory()}
+                                >
+                                    Cancel
+                                </Button>
+                            </React.Fragment>
+                            :
+                            null
+                        }
                     </Grid>
                     {loadingIndicator}
                 </Grid>
@@ -82,12 +119,16 @@ class CategoryForm extends Component {
 }
 const mapStateToProps = (state) => ({
     name: state.category.name,
-    loading: state.category.loadingAdd
+    loading: state.category.loadingAdd,
+    editing: state.category.editing,
+    loadingUpdate: state.category.loadingUpdate,
+    category: state.category.category
 })
 
 const mapDispatchToProps = {
     addCategory,
-    updateCategory
+    updateCategory,
+    cancelEditCategory
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CategoryForm));

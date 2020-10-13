@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {
     changeName
 } from '../../Actions/Category';
+import {isNullOrEmpty} from '../../helpers';
 
 // export default function CategoryNameField() {
 //     const dispatch = useDispatch()
@@ -33,7 +34,7 @@ class CategoryNameField extends Component {
                 required
                 value={this.props.name}
                 onChange={e => this.props.changeName(e.target.value)}
-                error={this.props.errorExists}
+                error={!isNullOrEmpty(this.props.error)}
                 helperText={this.props.error}
                 disabled={this.props.loadingAdd}
             />

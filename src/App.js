@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import "./App.css";
 import {Provider} from 'react-redux';
+import {BrowserRouter as Router} from 'react-router-dom'
 import {
   createMuiTheme,
   MuiThemeProvider
@@ -9,6 +10,7 @@ import blue from '@material-ui/core/colors/blue';
 import red from '@material-ui/core/colors/red';
 import store from './Store';
 import Layout from './Components/Layout';
+import SiteBar from './Components/SiteBar';
 
 const theme = createMuiTheme({
   palette: {
@@ -29,12 +31,10 @@ class App extends Component {
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>
           <div className="App">
-            <Layout />
-            {/* <SiteBar />
-            <Nav />
-            <Main>
-              <CategoryForm />
-            </Main> */}
+            <SiteBar />
+            <Router>
+              <Layout />
+            </Router>
           </div>
         </MuiThemeProvider>
       </Provider>
