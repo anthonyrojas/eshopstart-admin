@@ -18,6 +18,7 @@ import EditSharp from '@material-ui/icons/EditSharp';
 import DeleteForeverSharpIcon from '@material-ui/icons/DeleteForeverSharp';
 import TablePagination from '@material-ui/core/TablePagination';
 import Tooltip from '@material-ui/core/Tooltip';
+import DeleteCategoryDialog from './DeleteCategoryDialog';
 
 const styles = theme => ({
     head: {
@@ -37,7 +38,9 @@ class CategoryTable extends Component {
         // this.paginatioRef = React.createRef();
         this.state = {
             page: 0,
-            rowsPerPage: 10
+            rowsPerPage: 10,
+            displayDeleteDialog: false,
+            category: ''
         }
     }
     componentDidMount(){
@@ -59,12 +62,27 @@ class CategoryTable extends Component {
             rowsPerPage: e.target.value
         })
     }
+
+    openDeleteDialog = (c) => {
+        this.setState({
+            displayDeleteDialog: true,
+            category: c
+        });
+    }
+
+    handleCloseDeleteDialog = e => {
+        this.setState({
+            displayDeleteDialog: false,
+            category: ''
+        });
+    }
     
     render() {
         const {classes} = this.props;
         const {page, rowsPerPage} = this.state;
         return (
             <React.Fragment>
+            <DeleteCategoryDialog open={this.state.displayDeleteDialog} handleClose={this.handleCloseDeleteDialog} category={this.state.category} />
             <TableContainer component={Paper} elevation={4}>
                 <Table aria-label='category table'>
                     <TableHead className={classes.head}>
@@ -94,7 +112,7 @@ class CategoryTable extends Component {
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title='Delete' aria-label='Delete Category' placement='top'>
-                                            <IconButton color='secondary'>
+                                            <IconButton color='secondary' onClick={this.openDeleteDialog.bind(this, category)}>
                                                 <DeleteForeverSharpIcon />
                                             </IconButton>
                                         </Tooltip>

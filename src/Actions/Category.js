@@ -20,6 +20,7 @@ import {
 }
 from '../Types';
 import client from '../axiosClient';
+import { isNullOrEmpty } from '../helpers';
 
 export const changeName = (data) => {
     return ({
@@ -77,6 +78,18 @@ export const addCategory = (data) => {
             payload: true
         });
         try{
+            if(isNullOrEmpty(data.name)){
+                return dispatch({
+                    type: ADD_CATEGORY_FAILURE,
+                    payload: {
+                        statusMessage: 'There are errors in your submission. Fill out all required fields.',
+                        errors: {
+                            name: 'Name is required'
+                        },
+                        errorExists: true
+                    }
+                })
+            }
             const res = await client.post('/category', {
                 name: data.name
             });
@@ -133,6 +146,18 @@ export const updateCategory = (data) => {
             payload: true
         });
         try{
+            if(isNullOrEmpty(data.name)){
+                return dispatch({
+                    type: ADD_CATEGORY_FAILURE,
+                    payload: {
+                        statusMessage: 'There are errors in your submission. Fill out all required fields.',
+                        errors: {
+                            name: 'Name is required'
+                        },
+                        errorExists: true
+                    }
+                })
+            }
             const res = await client.put(`/category/${data.id}`, {
                 name: data.name
             });
