@@ -1,4 +1,5 @@
 import { EMPTY_STRING } from '../constants';
+import { isUndefinedOrNullOrEmpty } from '../helpers';
 import {
     LOGIN_EMAIL_CHANGED,
     LOGIN_PASSWORD_CHANGED,
@@ -12,7 +13,7 @@ import {
 } from '../Types';
 
 const intitialState = {
-    authenticated: localStorage.getItem('accessToken') || false,
+    authenticated: !isUndefinedOrNullOrEmpty(localStorage.getItem('accessToken')),
     accessToken: localStorage.getItem('accessToken') || EMPTY_STRING,
     refreshToken: localStorage.getItem('refreshToken') || EMPTY_STRING,
     expiresAt: localStorage.getItem('expiresAt') || 0,
@@ -91,11 +92,13 @@ export default (state=intitialState, action) => {
             return{
                 ...state,
                 refreshing: false,
-                statusMessage: action.payload.statusMessage
+                statusMessage: action.payload.statusMessage,
+                authenticated: false
             }
         case REFRESH_LOGIN_SUCCESS:
             return{
                 ...state,
+                authenticated: true,
                 expiresAt: action.payload.expiresAt,
                 refreshBy: action.payload.refreshBy,
                 refreshToken: action.payload.refreshToken,

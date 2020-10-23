@@ -7,6 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import LogoutButton from './LogoutButton';
+import {Link, withRouter} from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -48,15 +49,15 @@ const Nav = (props) => {
             <Toolbar />
             <div className={classes.drawerContainer}>
                 <List>
-                    <ListItem>
+                    <ListItem button component={Link} to='/products'>
                         <ListItemText>Products</ListItemText>
                     </ListItem>
                     <Divider />
-                    <ListItem>
+                    <ListItem button component={Link} to='/'>
                         <ListItemText>Categories</ListItemText>
                     </ListItem>
                     <Divider />
-                    <ListItem>
+                    <ListItem button component={Link} to='/users'>
                         <ListItemText>Users</ListItemText>
                     </ListItem>
                     <Divider />
@@ -68,4 +69,4 @@ const Nav = (props) => {
         </Drawer>
     )
 }
-export default Nav;
+export default withRouter(Nav);

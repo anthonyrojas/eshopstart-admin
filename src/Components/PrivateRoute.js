@@ -19,53 +19,48 @@ const styles = theme => ({
 class PrivateRoute extends Component {
     constructor(props){
         super(props);
-        // this.timer = null;
+        this.timer = null;
     }
     componentDidMount(){
-        if(localStorage.getItem('refreshBy') < Date.now()){
+        if(Number(this.props.refreshBy) < Date.now()){
+            clearTimeout(this.timer);
+            this.props.logout();
+        }
+        else if(Number(this.props.expiresAt) < Date.now() - 2000){
+            clearTimeout(this.timer);
+            this.props.refreshLogin(this.props.refreshToken);
+            this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
+        }else{
+            clearTimeout(this.timer);
+            this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
+        }
+    }
+    componentDidUpdate(){
+        if(Number(this.props.refreshBy) < Date.now()){
+            clearTimeout(this.timer);
+            this.props.logout();
+        }
+        else if(Number(this.props.expiresAt) < Date.now() - 2000){
+            clearTimeout(this.timer);
+            this.props.refreshLogin(this.props.refreshToken);
+            this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
+        }else{
+            clearTimeout(this.timer);
+            this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
+        }
+    }
+    componentWillUnmount(){
+        clearTimeout(this.timer)
+    }
+
+    refreshTokens(){
+        if(localStorage.getItem('expiresAt') - 300 < Date.now()){
+            this.props.refreshLogin(localStorage.getItem("refreshToken"));
+        }
+        else if(localStorage.getItem('refreshBy') < Date.now()){
             this.props.logout();
         }
     }
-    // componentDidMount(){
-    //     if(Number(this.props.refreshBy) < Date.now()){
-    //         clearTimeout(this.timer);
-    //         this.props.logout();
-    //     }
-    //     else if(Number(this.props.expiresAt) < Date.now() - 2000){
-    //         clearTimeout(this.timer);
-    //         this.props.refreshLogin(this.props.refreshToken);
-    //         this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
-    //     }else{
-    //         clearTimeout(this.timer);
-    //         this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
-    //     }
-    //     // window.addEventListener('focus', this.refreshTokens)
-    // }
-    // componentDidUpdate(){
-    //     if(Number(this.props.refreshBy) < Date.now()){
-    //         clearInterval(this.timer);
-    //         this.props.logout();
-    //     }
-    //     else if(Number(this.props.expiresAt) < Date.now() - 2000){
-    //         clearTimeout(this.timer);
-    //         this.props.refreshLogin(this.props.refreshToken);
-    //         this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
-    //     }else{
-    //         clearTimeout(this.timer);
-    //         this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
-    //     }
-    // }
-    // componentWillUnmount(){
-    //     clearTimeout(this.timer);
-    // }
-
-    // refreshTokens(){
-    //     if(this.props.refreshBy < Date.now()){
-    //         this.props.logout();
-    //     }else{
-    //         this.props.refreshLogin(this.props.refreshToken);
-    //     }
-    // }
     render() {
         const {classes} = this.props;
         const {component: Component, ...props} = this.props;

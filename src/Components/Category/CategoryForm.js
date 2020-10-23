@@ -62,6 +62,7 @@ class CategoryForm extends Component {
                     justify='center' 
                     alignItems='center'
                     component='form'
+                    method='POST'
                 >
                     <Grid item xs={12}>
                         <Typography 
