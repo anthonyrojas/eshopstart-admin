@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-class IsDeliverable extends Component {
+class IsActive extends Component {
     render() {
         return (
             <FormControlLabel
                 control={
                     <Checkbox
                         color='primary'
-                        name='is-deliverable-input'
+                        name='is-active-input'
                     />
                 }
-                label='Is Deliverable'
+                label='Is Active'
             />
         )
     }
@@ -25,4 +25,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(IsDeliverable)
+export default connect(mapStateToProps, mapDispatchToProps)(IsActive)

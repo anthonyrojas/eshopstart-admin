@@ -13,6 +13,9 @@ import Layout from './Components/Layout';
 import SiteBar from './Components/SiteBar';
 
 const theme = createMuiTheme({
+  typography: {
+    fontFamily: 'Nunito, sans-serif'
+  },
   palette: {
     type: 'dark',
     primary: blue,
