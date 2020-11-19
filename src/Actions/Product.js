@@ -27,15 +27,17 @@ import {
     PRODUCT_SKU_CHANGED,
     PRODUCT_UPC_CHANGED,
     PRODUCT_WEIGHT_CHANGED,
-    PRODUCT_WIDTH_CHANGED
+    PRODUCT_WIDTH_CHANGED,
+    EDIT_PRODUCT,
+    CANCEL_EDIT_PRODUCT,
+    PRODUCT_FILE_CHANGED,
+    PRODUCT_RESET_STATUS_MESSAGE
 } from '../Types/Product';
 import client from '../axiosClient';
 import {
     isUndefinedOrNull,
-    isUndefinedOrNullOrEmpty,
     validateProduct
 } from '../helpers'
-import Axios from 'axios';
 
 export const productNameChanged = (data) => {
     return({
@@ -164,7 +166,7 @@ export const getProduct = (data) => {
             payload: true
         });
         try{
-            const res = await client.get(`/product/${id}`);
+            const res = await client.get(`/product/${data.id}`);
             dispatch({
                 type: GET_PRODUCT_SUCCESS,
                 payload: res.data
@@ -207,7 +209,7 @@ export const addProduct = (data) => {
         });
         try{
             let res = null;
-            const validation = validateProduct(data);
+            const validation = await validateProduct(data);
             if(validation.errorExists){
                 return dispatch({
                     type: ADD_PRODUCT_FAILURE,
@@ -218,12 +220,29 @@ export const addProduct = (data) => {
                     }
                 })
             }else if(data.isDigital){
-                res = await client.post('/product/digital', data, {
+                const formData = new FormData();
+                formData.append('name', data.name);
+                formData.append('description', data.description);
+                formData.append('price', data.price);
+                formData.append('isDeliverable', data.isDigital ? false : data.isDeliverable);
+                formData.append('isDigital', data.isDigital);
+                formData.append('downloadsPermitted', data.downloadsPermitted);
+                formData.append('weight', 0);
+                formData.append('height', 0);
+                formData.append('length', 0);
+                formData.append('width', 0);
+                formData.append('upc', data.upc);
+                formData.append('sku', data.sku);
+                formData.append('isbn', data.isbn);
+                formData.append('isActive', data.isActive);
+                formData.append('productFile', data.file);
+                res = await client.post('/product/digital', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
             }else{
+                data.isDeliverable = !data.isDigital;
                 res = await client.post('/product', data);
             }
             dispatch({
@@ -231,6 +250,7 @@ export const addProduct = (data) => {
                 payload: res.data
             });
         }catch(e){
+            console.log(e);
             dispatch({
                 type: ADD_PRODUCT_FAILURE,
                 payload: e.response.data
@@ -260,7 +280,8 @@ export const updateProduct = (data) => {
             }else if(data.isDigital){
                 res = await client.put(`/product/${data.id}/digital`, data);
             }else{
-                res = await client.put(`/product/${id}`, data);
+                data.isDeliverable = !data.isDigital;
+                res = await client.put(`/product/${data.id}`, data);
             }
             dispatch({
                 type: UPDATE_PRODUCT_SUCCESS,
@@ -297,4 +318,32 @@ export const deleteProduct = (data) => {
             });
         }
     }
+}
+
+export const editProduct = (data) => {
+    return({
+        type: EDIT_PRODUCT,
+        payload: data
+    })
+}
+
+export const cancelEditProduct = (data) => {
+    return({
+        type: CANCEL_EDIT_PRODUCT,
+        payload: data
+    });
+}
+
+export const productFileChanged = (data) => {
+    return({
+        type: PRODUCT_FILE_CHANGED,
+        payload: data
+    });
+}
+
+export const resetStatusMessage = (data) =>{
+    return({
+        type: PRODUCT_RESET_STATUS_MESSAGE,
+        payload: data
+    })
 }

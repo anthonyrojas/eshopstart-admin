@@ -93,7 +93,11 @@ export default (state=intitialState, action) => {
                 ...state,
                 refreshing: false,
                 statusMessage: action.payload.statusMessage,
-                authenticated: false
+                authenticated: false,
+                refreshToken: EMPTY_STRING,
+                accessToken: EMPTY_STRING,
+                refreshBy: EMPTY_STRING,
+                expiresAt: EMPTY_STRING
             }
         case REFRESH_LOGIN_SUCCESS:
             return{

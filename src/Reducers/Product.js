@@ -27,7 +27,11 @@ import {
     PRODUCT_SKU_CHANGED,
     PRODUCT_UPC_CHANGED,
     PRODUCT_WEIGHT_CHANGED,
-    PRODUCT_WIDTH_CHANGED
+    PRODUCT_WIDTH_CHANGED, 
+    EDIT_PRODUCT,
+    CANCEL_EDIT_PRODUCT,
+    PRODUCT_FILE_CHANGED,
+    PRODUCT_RESET_STATUS_MESSAGE
 } from '../Types/Product';
 import {
     EMPTY_STRING
@@ -49,6 +53,8 @@ const initialState = {
     sku: EMPTY_STRING,
     isbn: EMPTY_STRING,
     isActive: false,
+    filename: EMPTY_STRING,
+    file: EMPTY_STRING,
     statusMessage: EMPTY_STRING,
     errorExists: true,
     errors: {
@@ -72,7 +78,8 @@ const initialState = {
     loadingAdd: false,
     loadingDelete: false,
     products: [],
-    product: EMPTY_STRING
+    product: EMPTY_STRING,
+    editing: false
 }
 export default (state=initialState, action) => {
     switch(action.type){
@@ -199,8 +206,7 @@ export default (state=initialState, action) => {
                 loadingAdd: true,
                 errors: {
                     ...initialState.errors
-                },
-                loadingAdd: true
+                }
             }
         case ADD_PRODUCT_SUCCESS:
             return{
@@ -223,7 +229,8 @@ export default (state=initialState, action) => {
                 sku: EMPTY_STRING,
                 isbn: EMPTY_STRING,
                 isActive: false,
-                loadingAdd: false
+                loadingAdd: false,
+                file: EMPTY_STRING
             }
         case ADD_PRODUCT_FAILURE:
             return{
@@ -283,7 +290,9 @@ export default (state=initialState, action) => {
                 upc: EMPTY_STRING,
                 sku: EMPTY_STRING,
                 isbn: EMPTY_STRING,
-                isActive: false
+                isActive: false,
+                editing: false,
+                file: EMPTY_STRING
             }
         case DELETE_PRODUCT:
             return{
@@ -305,6 +314,27 @@ export default (state=initialState, action) => {
                 loadingDelete: false,
                 statusMessage: action.payload.statusMessage,
                 errorExists: true
+            }
+        case EDIT_PRODUCT:
+            return{
+                ...state,
+                editing: true
+            }
+        case CANCEL_EDIT_PRODUCT:
+            return{
+                ...state,
+                editing: false
+            }
+        case PRODUCT_FILE_CHANGED:
+            return{
+                ...state,
+                filename: action.payload.filename,
+                file: action.payload.file
+            }
+        case PRODUCT_RESET_STATUS_MESSAGE:
+            return{
+                ...state,
+                statusMessage: EMPTY_STRING
             }
         default: return state;
     }

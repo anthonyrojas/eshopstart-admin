@@ -49,7 +49,11 @@ const Nav = (props) => {
             <Toolbar />
             <div className={classes.drawerContainer}>
                 <List>
-                    <ListItem button component={Link} to='/products'>
+                    <ListItem 
+                      button 
+                      component={Link} 
+                      selected={props.history.location.pathname === 'products'}
+                      to='/products'>
                         <ListItemText>Products</ListItemText>
                     </ListItem>
                     <Divider />
