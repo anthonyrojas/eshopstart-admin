@@ -78,6 +78,11 @@ const initialState = {
     loadingAdd: false,
     loadingDelete: false,
     products: [],
+    rowCount: 0,
+    limit: 25,
+    skip: 0,
+    orderBy: 'id',
+    sort: 'asc',
     product: EMPTY_STRING,
     editing: false
 }
@@ -180,15 +185,22 @@ export default (state=initialState, action) => {
                 ...state,
                 errorExists: false,
                 loadingGet: true,
-                statusMessage: EMPTY_STRING
+                statusMessage: EMPTY_STRING,
+                orderBy: action.payload.orderBy,
+                sort: action.payload.sort,
+                limit: action.payload.limit,
+                skip: action.payload.skip
             }
         case GET_PRODUCTS_SUCCESS:
             return{
                 ...state,
                 erorrExists: false,
-                statusMessage: action.payload.statusMessage,
+                statusMessage: '',
                 products: action.payload.products,
-                loadingGet: false
+                loadingGet: false,
+                rowCount: action.payload.total,
+                limit: action.payload.limit,
+                skip: action.payload.skip                
             }
         case GET_PRODUCTS_FAILURE:
             return{

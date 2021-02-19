@@ -72,7 +72,7 @@ class PrivateRoute extends Component {
                     props=>(
                         this.props.authenticated ?
                         <React.Fragment>
-                            <Navigation />
+                            <Navigation location={this.props.location} />
                             <main className={classes.content}>
                                 <Toolbar />
                                 <Component {...props} />

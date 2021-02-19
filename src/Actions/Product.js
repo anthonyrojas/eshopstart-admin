@@ -36,6 +36,7 @@ import {
 import client from '../axiosClient';
 import {
     isUndefinedOrNull,
+    isUndefinedOrNullOrEmpty,
     validateProduct
 } from '../helpers'
 
@@ -140,12 +141,14 @@ export const getProducts = (data) => {
     return async(dispatch) => {
         dispatch({
             type: GET_PRODUCTS,
-            payload: true
+            payload: data
         })
         try{
             let limit = isUndefinedOrNull(data.limit) ? 20 : data.limit;
             let skip = isUndefinedOrNull(data.skip) ? 0 : data.skip;
-            const res = await client.get(`/product?limit=${limit}&skip=${skip}`);
+            let orderBy = isUndefinedOrNull(data.orderBy) ? '' : `&orderBy=${data.orderBy}`;
+            let sort = isUndefinedOrNull(data.sort) ? '' : `&sort=${data.sort}`
+            const res = await client.get(`/product?limit=${limit}&skip=${skip}${orderBy}${sort}`);
             dispatch({
                 type: GET_PRODUCTS_SUCCESS,
                 payload: res.data
@@ -166,7 +169,7 @@ export const getProduct = (data) => {
             payload: true
         });
         try{
-            const res = await client.get(`/product/${data.id}`);
+            const res = await client.get(`/product/id/${data.id}`);
             dispatch({
                 type: GET_PRODUCT_SUCCESS,
                 payload: res.data
@@ -250,7 +253,7 @@ export const addProduct = (data) => {
                 payload: res.data
             });
         }catch(e){
-            console.log(e);
+            console.error(e);
             dispatch({
                 type: ADD_PRODUCT_FAILURE,
                 payload: e.response.data

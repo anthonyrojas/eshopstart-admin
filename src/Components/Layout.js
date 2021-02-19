@@ -10,7 +10,8 @@ import {
     logout
 } from '../Actions/Login'
 import ProductForm from './Product/ProductForm';
-
+import Product from './Product/Product';
+import ProductList from './Product/ProductList';
 class Layout extends Component {
     componentDidMount(){
         if(this.props.authenticated){
@@ -46,7 +47,9 @@ class Layout extends Component {
         return (
             <Switch>
                 <PrivateRoute exact path='/' component={Category} />
-                <PrivateRoute path='/products' component={ProductForm} />
+                <PrivateRoute exact path='/products' component={ProductList} />
+                <PrivateRoute exact path='/product' component={ProductForm} />
+                <PrivateRoute path='/products/:id' component={Product} />
                 <PublicRoute path='/login' component={Login} />
             </Switch>
         )
