@@ -8,6 +8,9 @@ import {
     getProducts
 } from '../../Actions/Product';
 import { Typography } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import {Link} from 'react-router-dom';
 
 const styles = theme => ({
     dataGrid: {
@@ -20,7 +23,7 @@ const styles = theme => ({
 class ProductList extends Component {
     componentDidMount(){
         this.props.getProducts({
-            limit: this.props.limit, 
+            limit: this.props.limit,
             skip: this.props.skip
         });
     }
@@ -33,31 +36,50 @@ class ProductList extends Component {
         });
     }
     pageChanged = (e) => {
-        this.props.getProducts({
-            limit: this.props.limit,
-            skip: (e.page-1)*this.props.limit,
-            orderBy: this.props.orderBy,
-            sort: this.props.sort
-        })
+        //check to make sure page value is changing to prevent rerender and subsequent api calls
+        if(this.props.skip !== (e.page-1)*this.props.limit){
+            this.props.getProducts({
+                limit: this.props.limit,
+                skip: (e.page-1)*this.props.limit,
+                orderBy: this.props.orderBy,
+                sort: this.props.sort
+            })
+        }
     }
     pageSizeChanged = (e) => {
         let page = this.props.skip;
         while(this.props.productsCount < (page * e.pageSize)){
             page -= 1;
         }
-        this.props.getProducts({
-            limit: e.pageSize,
-            skip: page,
-            orderBy: this.props.orderBy,
-            sort: this.props.sort
-        })
+        //check to make sure next page size is different to prevent rerender and subsequent api call
+        if(this.props.limit !== e.pageSize){
+            this.props.getProducts({
+                limit: e.pageSize,
+                skip: page,
+                orderBy: this.props.orderBy,
+                sort: this.props.sort
+            })
+        }
     }
     render() {
         const cols = [
             {
                 field: 'id',
                 headerName: 'ID',
-                type: 'number'
+                type: 'number',
+                width: 100,
+                renderCell: (params) => (
+                    <strong>
+                        <IconButton
+                            color='primary'
+                            component={Link}
+                            to={`/products/${params.value}`}
+                        >
+                            <VisibilityIcon />
+                        </IconButton>
+                        {params.value}
+                    </strong>
+                )
             },
             {
                 field: 'name',
@@ -103,7 +125,7 @@ class ProductList extends Component {
                         <DataGrid
                             columns={cols}
                             rows={this.props.products}
-                            rowsPerPageOptions={[25, 50, 100]}
+                            rowsPerPageOptions={[3, 25, 50, 100]}
                             paginationMode='server'
                             rowCount={this.props.productsCount}
                             pageSize={this.props.limit}
@@ -111,6 +133,7 @@ class ProductList extends Component {
                             onPageSizeChange={this.pageSizeChanged.bind(this)}
                             onSortModelChange={this.filterModelChanged.bind(this)}
                             onPageChange={this.pageChanged.bind(this)}
+                            disableSelectionOnClick
                         />
                     </Grid>
                 </Paper>

@@ -30,6 +30,8 @@ import {
     resetStatusMessage
 } from '../../Actions/Product';
 import Button from '@material-ui/core/Button';
+import ProductImage from './ProductFormFields/ProductImage';
+
 
 const styles = theme => ({
     paper: {
@@ -153,6 +155,9 @@ class ProductForm extends Component {
                     {
                         digitalRender
                     }
+                    <Grid item xs={12}>
+                        <ProductImage />
+                    </Grid>
                     <Grid item xs={12} style={{textAlign: 'center'}}>
                         <SubmitButton />
                     </Grid>

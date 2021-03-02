@@ -169,7 +169,6 @@ export default (state=initialState, action) => {
             return{
                 ...state,
                 product: action.payload.product,
-                statusMessage: action.payload.statusMessage,
                 errorExists: false,
                 loadingGet: false
             }

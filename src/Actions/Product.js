@@ -38,7 +38,10 @@ import {
     isUndefinedOrNull,
     isUndefinedOrNullOrEmpty,
     validateProduct
-} from '../helpers'
+} from '../helpers';
+import {
+    uploadProductImage
+} from './ProductImage'
 
 export const productNameChanged = (data) => {
     return({
@@ -204,13 +207,15 @@ export const getProductBySlug = (data) => {
     }
 }
 
-export const addProduct = (data) => {
+export const addProduct = (d) => {
     return async(dispatch) => {
         dispatch({
             type: ADD_PRODUCT,
             payload: true
         });
         try{
+            let data = d.product;
+            let productImage = d.productImage;
             let res = null;
             const validation = await validateProduct(data);
             if(validation.errorExists){
@@ -247,6 +252,12 @@ export const addProduct = (data) => {
             }else{
                 data.isDeliverable = !data.isDigital;
                 res = await client.post('/product', data);
+            }
+            if(!isUndefinedOrNull(productImage) && productImage !== ''){
+                dispatch(uploadProductImage({
+                    productId: res.data.product.id,
+                    productImage: productImage
+                }))
             }
             dispatch({
                 type: ADD_PRODUCT_SUCCESS,

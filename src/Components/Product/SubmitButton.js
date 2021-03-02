@@ -11,21 +11,24 @@ class SubmitButton extends Component {
     onClickSubmitBtn = (e) => {
         e.preventDefault();
         let data = {
-            name: this.props.name,
-            description: this.props.description,
-            price: this.props.price,
-            isDeliverable: this.props.isDeliverable,
-            isDigital: this.props.isDigital,
-            downloadsPermitted: this.props.downloadsPermitted,
-            weight: this.props.weight,
-            height: this.props.height,
-            length: this.props.length,
-            width: this.props.width,
-            upc: this.props.upc,
-            sku: this.props.sku,
-            isbn: this.props.isbn,
-            isActive: this.props.isActive,
-            file: this.props.file
+            product: {
+                name: this.props.name,
+                description: this.props.description,
+                price: this.props.price,
+                isDeliverable: this.props.isDeliverable,
+                isDigital: this.props.isDigital,
+                downloadsPermitted: this.props.downloadsPermitted,
+                weight: this.props.weight,
+                height: this.props.height,
+                length: this.props.length,
+                width: this.props.width,
+                upc: this.props.upc,
+                sku: this.props.sku,
+                isbn: this.props.isbn,
+                isActive: this.props.isActive,
+                file: this.props.file,
+            },
+            productImage: this.props.productImage
         }
         if(this.props.editing){
             //updating a product
@@ -93,7 +96,8 @@ const mapStateToProps = (state) => ({
     sku: state.product.sku,
     isbn: state.product.isbn,
     isActive: state.product.isActive,
-    file: state.product.file
+    file: state.product.file,
+    productImage: state.productImage.productImage
 })
 
 const mapDispatchToProps = {
