@@ -18,6 +18,7 @@ import {
     isUndefinedOrNullOrEmpty
 } from '../../helpers';
 import ProductImageSlider from './ProductImageSlider';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const styles = theme => ({
     paper: {
@@ -37,6 +38,9 @@ class Product extends Component {
                 <ListItem>
                     <ListItemText 
                         primary={
+                            this.props.loadingGet ? 
+                            <Skeleton />
+                            :
                             <Typography variant='body1'>
                                 {this.props.product.downloadsPermitted}
                             </Typography>
@@ -48,6 +52,9 @@ class Product extends Component {
                 <ListItem>
                     <ListItemText 
                         primary={
+                            this.props.loadingGet ? 
+                            <Skeleton />
+                            :
                             <Typography variant='body1'>
                                 {this.props.product.digitalPath}
                             </Typography>
@@ -62,6 +69,9 @@ class Product extends Component {
                 <ListItem>
                     <ListItemText 
                         primary={
+                            this.props.loadingGet ? 
+                            <Skeleton />
+                            :
                             <Typography>
                                 {this.props.product.height}in. X {this.props.product.width}in. X {this.props.product.length}in.
                             </Typography>
@@ -73,6 +83,9 @@ class Product extends Component {
                 <ListItem>
                     <ListItemText 
                         primary={
+                            this.props.loadingGet ? 
+                            <Skeleton/>
+                            :
                             <Typography>
                                 {this.props.product.weight}oz.
                             </Typography>
@@ -84,6 +97,9 @@ class Product extends Component {
                 <ListItem>
                     <ListItemText 
                         primary={
+                            this.props.loadingGet ?
+                            <Skeleton />
+                            :
                             <Typography>
                                 {new String(this.props.product.isDeliverable).toUpperCase()}
                             </Typography>
@@ -107,7 +123,7 @@ class Product extends Component {
                     <Grid item xs={12} lg={5}>
                         {
                             this.props.loadingGet || isUndefinedOrNull(this.props.product) || this.props.product === ''? 
-                            null :
+                            <Skeleton style={{margin: 'auto'}} variant='rect' width='100%' height={300} /> :
                             <ProductImageSlider productImages={this.props.product.ProductImages} label={this.props.product.name}/>
 
                         }
@@ -117,9 +133,12 @@ class Product extends Component {
                         <ListItem>
                             <ListItemText 
                                 primary={
-                                <Typography variant='body1'>
-                                    {this.props.product.id}
-                                </Typography>
+                                    this.props.loadingGet ? 
+                                    <Skeleton />
+                                    :
+                                    <Typography variant='body1'>
+                                        {this.props.product.id}
+                                    </Typography>
                                 }
                                 secondary='ID'
                             />
@@ -128,9 +147,12 @@ class Product extends Component {
                         <ListItem>
                             <ListItemText 
                                 primary={
-                                <Typography variant='body1'>
-                                    {this.props.product.slug}
-                                </Typography>
+                                    this.props.loadingGet ? 
+                                    <Skeleton />
+                                    :
+                                    <Typography variant='body1'>
+                                        {this.props.product.slug}
+                                    </Typography>
                                 }
                                 secondary='Slug'
                             />
@@ -139,9 +161,12 @@ class Product extends Component {
                         <ListItem>
                             <ListItemText 
                                 primary={
-                                <Typography variant='h5'>
-                                    {this.props.product.name}
-                                </Typography>                                    
+                                    this.props.loadingGet ? 
+                                    <Skeleton />
+                                    :
+                                    <Typography variant='h5'>
+                                        {this.props.product.name}
+                                    </Typography>                                    
                                 }
                                 secondary='Name'
                             />
@@ -150,9 +175,12 @@ class Product extends Component {
                         <ListItem>
                             <ListItemText 
                                 primary={
-                                <Typography variant='body1'>
-                                    {this.props.product.description}
-                                </Typography>                                    
+                                    this.props.loadingGet ? 
+                                    <Skeleton />
+                                    :
+                                    <Typography variant='body1'>
+                                        {this.props.product.description}
+                                    </Typography>
                                 }
                                 secondary='Description'
                             />
@@ -161,9 +189,12 @@ class Product extends Component {
                         <ListItem>
                             <ListItemText 
                                 primary={
-                                <Typography variant='body1'>
-                                    ${this.props.product.price}
-                                </Typography>                                    
+                                    this.props.loadingGet ? 
+                                    <Skeleton />
+                                    :
+                                    <Typography variant='body1'>
+                                        ${this.props.product.price}
+                                    </Typography>
                                 }
                                 secondary='Price'
                             />
@@ -172,9 +203,12 @@ class Product extends Component {
                         <ListItem>
                             <ListItemText 
                                 primary={
-                                <Typography variant='body1'>
-                                    {new String(this.props.product.isActive).toUpperCase()}
-                                </Typography>
+                                    this.props.loadingGet ?
+                                    <Skeleton />
+                                    :
+                                    <Typography variant='body1'>
+                                        {new String(this.props.product.isActive).toUpperCase()}
+                                    </Typography>
                                 }
                                 secondary='Is Active'
                             />
@@ -183,6 +217,9 @@ class Product extends Component {
                         <ListItem>
                             <ListItemText
                                 primary={
+                                    this.props.loadingGet ? 
+                                    <Skeleton />
+                                    :
                                     <Typography variant='body1'>
                                         {new String(this.props.product.isDigital).toUpperCase()}
                                     </Typography>
@@ -190,54 +227,52 @@ class Product extends Component {
                                 secondary='Is Digital'
                             />
                         </ListItem>
-                        {
-                            isUndefinedOrNullOrEmpty(this.props.product.sku) ? null : 
-                            <React.Fragment>
-                                <Divider variant='middle' />
-                                <ListItem>
-                                    <ListItemText 
-                                        primary={
-                                            <Typography variant='body1'>
-                                                {this.props.product.sku}
-                                            </Typography>
+                        <Divider variant='middle' />
+                        <ListItem>
+                            <ListItemText 
+                                primary={
+                                    this.props.loadingGet ? 
+                                    <Skeleton />
+                                    :
+                                    <Typography variant='body1'>
+                                        {isUndefinedOrNullOrEmpty(this.props.product.sku) ? 'N/A' : this.props.product.sku}
+                                    </Typography>
+                                }
+                                secondary='SKU'
+                            />
+                        </ListItem>
+                        <Divider variant='middle' />
+                        <ListItem>
+                            <ListItemText 
+                                primary={
+                                    this.props.loadingGet ?
+                                    <Skeleton />
+                                    :
+                                    <Typography variant='body1'>
+                                        {
+                                            isUndefinedOrNullOrEmpty(this.props.product.upc) ? 'N/A' : this.props.product.upc
                                         }
-                                        secondary='SKU'
-                                    />
-                                </ListItem>
-                            </React.Fragment>
-                        }
-                        {
-                            isUndefinedOrNullOrEmpty(this.props.product.upc) ? null : 
-                            <React.Fragment>
-                                <Divider variant='middle' />
-                                <ListItem>
-                                    <ListItemText 
-                                        primary={
-                                            <Typography variant='body1'>
-                                                {this.props.product.upc}
-                                            </Typography>
+                                    </Typography>
+                                }
+                                secondary='UPC'
+                            />
+                        </ListItem>
+                        <Divider variant='middle' />
+                        <ListItem>
+                            <ListItemText 
+                                primary={
+                                    this.props.loadingGet ?
+                                    <Skeleton />
+                                    :
+                                    <Typography variant='body1'>
+                                        {
+                                            isUndefinedOrNullOrEmpty(this.props.product.isbn) ? 'N/A' : this.props.product.isbn
                                         }
-                                        secondary='UPC'
-                                    />
-                                </ListItem>
-                            </React.Fragment>
-                        }
-                        {
-                            isUndefinedOrNullOrEmpty(this.props.product.isbn) ? null : 
-                            <React.Fragment>
-                                <Divider variant='middle' />
-                                <ListItem>
-                                    <ListItemText 
-                                        primary={
-                                            <Typography variant='body1'>
-                                                {this.props.product.isbn}
-                                            </Typography>
-                                        }
-                                        secondary='ISBN'
-                                    />
-                                </ListItem>
-                            </React.Fragment>
-                        }
+                                    </Typography>
+                                }
+                                secondary='ISBN'
+                            />
+                        </ListItem>
                         <Divider variant='middle'/>
                         {
                             this.props.product.isDigital ? digitalRender : physicalRender
