@@ -8,10 +8,11 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import {
     productImageChanged
-} from '../../../Actions/ProductImage'
+} from '../../../Actions/ProductImage';
+import Typography from '@material-ui/core/Typography';
 
 class ProductImage extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.fileInputRef = React.createRef();
     }
@@ -42,7 +43,7 @@ class ProductImage extends Component {
                         >
                             Product Image
                         </InputLabel>
-                        <OutlinedInput 
+                        <OutlinedInput
                             id='product-image-input'
                             type='file'
                             label='Product Image'
@@ -54,18 +55,23 @@ class ProductImage extends Component {
                 </Grid>
                 {
                     this.props.file ?
-                    <Grid item xs={12}>
-                        &nbsp;
+                        <Grid item xs={12}>
+                            &nbsp;
                         <IconButton
-                            color='secondary'
-                            onClick={this.handleFileCleared.bind(this)}
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                    </Grid>
-                    :
-                    null
+                                color='secondary'
+                                onClick={this.handleFileCleared.bind(this)}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </Grid>
+                        :
+                        null
                 }
+                <Grid item xs={12}>
+                    <Typography variant='body2'>
+                        Add a product image with a label to be used by the ecommerce site. Make sure the label is short, but descriptive enough for the image.
+                    </Typography>
+                </Grid>
             </Grid>
         )
     }

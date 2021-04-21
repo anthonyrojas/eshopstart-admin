@@ -215,7 +215,7 @@ export const addProduct = (d) => {
         });
         try{
             let data = d.product;
-            let productImage = d.productImage;
+            let productImage = d.productImage.image;
             let res = null;
             const validation = await validateProduct(data);
             if(validation.errorExists){
@@ -256,7 +256,8 @@ export const addProduct = (d) => {
             if(!isUndefinedOrNull(productImage) && productImage !== ''){
                 dispatch(uploadProductImage({
                     productId: res.data.product.id,
-                    productImage: productImage
+                    productImage: productImage,
+                    label: d.productImage.label
                 }))
             }
             dispatch({

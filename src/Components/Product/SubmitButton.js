@@ -28,7 +28,10 @@ class SubmitButton extends Component {
                 isActive: this.props.isActive,
                 file: this.props.file,
             },
-            productImage: this.props.productImage
+            productImage: {
+                image: this.props.productImage,
+                label: this.props.label
+            }
         }
         if(this.props.editing){
             //updating a product

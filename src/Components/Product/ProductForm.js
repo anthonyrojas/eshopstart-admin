@@ -31,6 +31,8 @@ import {
 } from '../../Actions/Product';
 import Button from '@material-ui/core/Button';
 import ProductImage from './ProductFormFields/ProductImage';
+import ProductImageLabel from './ProductFormFields/ImageLabel';
+import Divider from '@material-ui/core/Divider'
 
 
 const styles = theme => ({
@@ -157,6 +159,9 @@ class ProductForm extends Component {
                     }
                     <Grid item xs={12}>
                         <ProductImage />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <ProductImageLabel />
                     </Grid>
                     <Grid item xs={12} style={{textAlign: 'center'}}>
                         <SubmitButton />

@@ -16,7 +16,8 @@ const styles = theme => ({
     dataGrid: {
         '& .MuiDataGrid-columnsContainer': {
             backgroundColor: '#000'
-        }
+        },
+        height: 1000,
     }
 });
 
@@ -37,10 +38,10 @@ class ProductList extends Component {
     }
     pageChanged = (e) => {
         //check to make sure page value is changing to prevent rerender and subsequent api calls
-        if(this.props.skip !== (e.page-1)*this.props.limit){
+        if(this.props.skip !== (e.page)*this.props.limit){
             this.props.getProducts({
                 limit: this.props.limit,
-                skip: (e.page-1)*this.props.limit,
+                skip: (e.page)*this.props.limit,
                 orderBy: this.props.orderBy,
                 sort: this.props.sort
             })
@@ -48,7 +49,7 @@ class ProductList extends Component {
     }
     pageSizeChanged = (e) => {
         let page = this.props.skip;
-        while(this.props.productsCount < (page * e.pageSize)){
+        while(this.props.productsCount < (page * e.pageSize) && page > 0){
             page -= 1;
         }
         //check to make sure next page size is different to prevent rerender and subsequent api call
@@ -121,19 +122,25 @@ class ProductList extends Component {
                     elevation={4}
                     style={{width: '100%'}}
                 >
-                    <Grid item xs={12} style={{height: 500}} className={classes.dataGrid}>
+                    <Grid item xs={12} 
+                        className={classes.dataGrid}
+                    >
                         <DataGrid
                             columns={cols}
                             rows={this.props.products}
                             rowsPerPageOptions={[3, 25, 50, 100]}
                             paginationMode='server'
+                            //total number of products
                             rowCount={this.props.productsCount}
+                            //number of rows per page
                             pageSize={this.props.limit}
-                            page={(this.props.skip/this.props.limit) + 1}
+                            page={(this.props.skip/this.props.limit)}
                             onPageSizeChange={this.pageSizeChanged.bind(this)}
                             onSortModelChange={this.filterModelChanged.bind(this)}
                             onPageChange={this.pageChanged.bind(this)}
                             disableSelectionOnClick
+                            pagination={!this.props.loadingGet}
+                            loading={this.props.loadingGet}
                         />
                     </Grid>
                 </Paper>

@@ -7,7 +7,10 @@ import {
     LOGOUT,
     REFRESH_LOGIN,
     REFRESH_LOGIN_FAILURE,
-    REFRESH_LOGIN_SUCCESS
+    REFRESH_LOGIN_SUCCESS,
+    GET_ACCOUNT,
+    GET_ACCOUNT_SUCCESS,
+    GET_ACCOUNT_FAILURE
 } from '../Types';
 import client from '../axiosClient';
 import { isNullOrEmpty } from '../helpers';
@@ -133,6 +136,23 @@ export const refreshLogin = (data) => {
             dispatch({
                 type: REFRESH_LOGIN_FAILURE,
                 payload: e.response.data
+            })
+        }
+    }
+}
+
+export const getAccount = (data) => {
+    return async(dispatch) => {
+        try{
+            const res = await client.get(`${process.env.REACT_APP_API_URI}/api/user`);
+            dispatch({
+                type: GET_ACCOUNT_SUCCESS,
+                payload: res.data
+            })
+        }catch(e){
+            dispatch({
+                type: GET_ACCOUNT_FAILURE,
+                payload: e.repsonse.data
             })
         }
     }

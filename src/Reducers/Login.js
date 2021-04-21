@@ -9,7 +9,10 @@ import {
     LOGOUT,
     REFRESH_LOGIN,
     REFRESH_LOGIN_FAILURE,
-    REFRESH_LOGIN_SUCCESS
+    REFRESH_LOGIN_SUCCESS,
+    GET_ACCOUNT,
+    GET_ACCOUNT_FAILURE,
+    GET_ACCOUNT_SUCCESS
 } from '../Types';
 
 const intitialState = {
@@ -24,25 +27,28 @@ const intitialState = {
     refreshing: false,
     errorExists: false,
     statusMessage: EMPTY_STRING,
+    accountErrorExists: false,
+    fetchingAccount: false,
+    account: '',
     errors: {
         email: EMPTY_STRING,
         password: EMPTY_STRING
     }
 }
-export default (state=intitialState, action) => {
-    switch(action.type){
+export default (state = intitialState, action) => {
+    switch (action.type) {
         case LOGIN_EMAIL_CHANGED:
-            return{
+            return {
                 ...state,
                 email: action.payload
             }
         case LOGIN_PASSWORD_CHANGED:
-            return{
+            return {
                 ...state,
                 password: action.payload
             }
         case LOGIN_SUBMIT:
-            return{
+            return {
                 ...state,
                 loading: true,
                 errorExists: false,
@@ -50,7 +56,7 @@ export default (state=intitialState, action) => {
                 errors: intitialState.errors
             }
         case LOGIN_SUBMIT_FAILED:
-            return{
+            return {
                 ...state,
                 loading: false,
                 errorExists: true,
@@ -62,7 +68,7 @@ export default (state=intitialState, action) => {
                 authenticated: false
             }
         case LOGIN_SUBMIT_SUCCESS:
-            return{
+            return {
                 ...state,
                 loading: false,
                 errorExists: false,
@@ -77,19 +83,19 @@ export default (state=intitialState, action) => {
                 password: EMPTY_STRING
             }
         case LOGOUT:
-            return{
+            return {
                 ...state,
                 authenticated: false,
                 email: EMPTY_STRING,
                 password: EMPTY_STRING
             }
         case REFRESH_LOGIN:
-            return{
+            return {
                 ...state,
                 refreshing: true
             }
         case REFRESH_LOGIN_FAILURE:
-            return{
+            return {
                 ...state,
                 refreshing: false,
                 statusMessage: action.payload.statusMessage,
@@ -100,13 +106,32 @@ export default (state=intitialState, action) => {
                 expiresAt: EMPTY_STRING
             }
         case REFRESH_LOGIN_SUCCESS:
-            return{
+            return {
                 ...state,
                 authenticated: true,
                 expiresAt: action.payload.expiresAt,
                 refreshBy: action.payload.refreshBy,
                 refreshToken: action.payload.refreshToken,
                 accessToken: action.payload.accessToken
+            }
+        case GET_ACCOUNT:
+            return{
+                ...state,
+                accountErrorExists: false,
+                fetchingAccount: true
+            }
+        case GET_ACCOUNT_SUCCESS:
+            return{
+                ...state,
+                accountErrorExists: false,
+                fetchingAccount: false,
+                account: action.payload.user
+            }
+        case GET_ACCOUNT_FAILURE:
+            return{
+                ...state,
+                accountErrorExists: true,
+                fetchingAccount: false
             }
         default: return state
     }

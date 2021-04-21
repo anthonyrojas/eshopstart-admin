@@ -6,7 +6,8 @@ import {withStyles} from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import {
     refreshLogin,
-    logout
+    logout,
+    getAccount
 } from '../Actions/Login'
 
 const styles = theme => ({
@@ -33,6 +34,10 @@ class PrivateRoute extends Component {
         }else{
             clearTimeout(this.timer);
             this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
+        }
+
+        if(this.props.account === ''){
+            this.props.getAccount()
         }
     }
     componentDidUpdate(){
@@ -90,9 +95,11 @@ const mapStateToProps = state => ({
     authenticated: state.login.authenticated,
     expiresAt: state.login.expiresAt,
     refreshBy: state.login.refreshBy,
-    refreshToken: state.login.refreshToken
+    refreshToken: state.login.refreshToken,
+    account: state.login.account
 })
 export default connect(mapStateToProps, {
     refreshLogin,
-    logout
+    logout,
+    getAccount
 })(withStyles(styles)(PrivateRoute));

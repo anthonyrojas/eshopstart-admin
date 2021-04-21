@@ -34,8 +34,12 @@ import {
     PRODUCT_RESET_STATUS_MESSAGE
 } from '../Types/Product';
 import {
+    PRODUCT_IMAGE_ORDER_UPDATE_SUCCESS, PRODUCT_IMAGE_UPLOAD_SUCCESS
+} from '../Types/ProductImage'
+import {
     EMPTY_STRING
 } from '../constants';
+import { isUndefinedOrNull } from '../helpers';
 
 const initialState = {
     id: -1,
@@ -346,6 +350,25 @@ export default (state=initialState, action) => {
             return{
                 ...state,
                 statusMessage: EMPTY_STRING
+            }
+        case PRODUCT_IMAGE_ORDER_UPDATE_SUCCESS:
+            return{
+                ...state,
+                product: {
+                    ...state.product,
+                    ProductImages: action.payload.productImages
+                }
+            }
+        case PRODUCT_IMAGE_UPLOAD_SUCCESS:
+            return{
+                ...state,
+                product: {
+                    ...state.product,
+                    ProductImages: [
+                        ...state.product.ProductImages,
+                        action.payload.productImage
+                    ]
+                }
             }
         default: return state;
     }
