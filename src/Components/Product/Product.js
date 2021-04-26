@@ -19,6 +19,8 @@ import {
 } from '../../helpers';
 import ProductImageSlider from './ProductImageSlider';
 import Skeleton from '@material-ui/lab/Skeleton';
+import Button from '@material-ui/core/Button';
+import {Link as RouterLink} from 'react-router-dom'
 
 const styles = theme => ({
     paper: {
@@ -31,8 +33,72 @@ class Product extends Component {
     componentDidMount(){
         this.props.getProduct({id: this.props.match.params.id});
     }
+    renderProductField(val, fieldType=null){
+        if(isUndefinedOrNull(val)){
+            return 'N/A';
+        }
+        if(fieldType !== null){
+            switch(fieldType){
+                case 'Currency':
+                    return `$${val}`
+                case 'Date':
+                    return new Date(val).toLocaleDateString('en-US')
+                case 'Boolean': 
+                    return val ? 'True' : 'False'
+                default: return val;
+            }
+        }
+        else{
+            return val;
+        }
+    }
     render() {
         const {classes} = this.props;
+        const listItems = [
+            {
+                field: 'id',
+                label: 'ID#'
+            },
+            {
+                field: 'slug',
+                label: 'Slug'
+            },
+            {
+                field: 'name',
+                label: 'Name'
+            },
+            {
+                field: 'description',
+                label: 'Description'
+            },
+            {
+                field: 'price',
+                label: 'Price',
+                type: 'Currency'
+            },
+            {
+                field: 'isActive',
+                label: 'Is Active',
+                type: 'Boolean'
+            },
+            {
+                field: 'isDigital',
+                label: 'Is Digital',
+                type: 'Boolean'
+            },
+            {
+                field: 'sku',
+                label: 'SKU'
+            },
+            {
+                field: 'upc',
+                label: 'UPC'
+            },
+            {
+                field: 'isbn',
+                label: 'ISBN'
+            }
+        ];
         const digitalRender = (
             <React.Fragment>
                 <ListItem>
@@ -111,176 +177,72 @@ class Product extends Component {
             </React.Fragment>
         );
         return (
-            <Paper elevation={6} className={classes.paper}>
-                <Grid 
-                    container 
-                    direction='row' 
-                    alignContent='center' 
-                    alignItems='center' 
-                    justify='center'
-                    spacing={2}
-                >
-                    <Grid item xs={12} lg={5}>
-                        {
-                            this.props.loadingGet || isUndefinedOrNull(this.props.product) || this.props.product === ''? 
-                            <Skeleton style={{margin: 'auto'}} variant='rect' width='100%' height={300} /> :
-                            <ProductImageSlider productImages={this.props.product.ProductImages} label={this.props.product.name}/>
-
-                        }
-                    </Grid>
-                    <Grid item xs={12} lg={7}>
-                        <List>
-                        <ListItem>
-                            <ListItemText 
-                                primary={
-                                    this.props.loadingGet ? 
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='body1'>
-                                        {this.props.product.id}
-                                    </Typography>
-                                }
-                                secondary='ID'
-                            />
-                        </ListItem>
-                        <Divider variant='middle'/>
-                        <ListItem>
-                            <ListItemText 
-                                primary={
-                                    this.props.loadingGet ? 
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='body1'>
-                                        {this.props.product.slug}
-                                    </Typography>
-                                }
-                                secondary='Slug'
-                            />
-                        </ListItem>
-                        <Divider variant='middle'/>
-                        <ListItem>
-                            <ListItemText 
-                                primary={
-                                    this.props.loadingGet ? 
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='h5'>
-                                        {this.props.product.name}
-                                    </Typography>                                    
-                                }
-                                secondary='Name'
-                            />
-                        </ListItem>
-                        <Divider variant='middle'/>
-                        <ListItem>
-                            <ListItemText 
-                                primary={
-                                    this.props.loadingGet ? 
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='body1'>
-                                        {this.props.product.description}
-                                    </Typography>
-                                }
-                                secondary='Description'
-                            />
-                        </ListItem>
-                        <Divider variant='middle'/>
-                        <ListItem>
-                            <ListItemText 
-                                primary={
-                                    this.props.loadingGet ? 
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='body1'>
-                                        ${this.props.product.price}
-                                    </Typography>
-                                }
-                                secondary='Price'
-                            />
-                        </ListItem>
-                        <Divider variant='middle'/>
-                        <ListItem>
-                            <ListItemText 
-                                primary={
-                                    this.props.loadingGet ?
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='body1'>
-                                        {new String(this.props.product.isActive).toUpperCase()}
-                                    </Typography>
-                                }
-                                secondary='Is Active'
-                            />
-                        </ListItem>
-                        <Divider variant='middle'/>
-                        <ListItem>
-                            <ListItemText
-                                primary={
-                                    this.props.loadingGet ? 
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='body1'>
-                                        {new String(this.props.product.isDigital).toUpperCase()}
-                                    </Typography>
-                                }
-                                secondary='Is Digital'
-                            />
-                        </ListItem>
-                        <Divider variant='middle' />
-                        <ListItem>
-                            <ListItemText 
-                                primary={
-                                    this.props.loadingGet ? 
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='body1'>
-                                        {isUndefinedOrNullOrEmpty(this.props.product.sku) ? 'N/A' : this.props.product.sku}
-                                    </Typography>
-                                }
-                                secondary='SKU'
-                            />
-                        </ListItem>
-                        <Divider variant='middle' />
-                        <ListItem>
-                            <ListItemText 
-                                primary={
-                                    this.props.loadingGet ?
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='body1'>
-                                        {
-                                            isUndefinedOrNullOrEmpty(this.props.product.upc) ? 'N/A' : this.props.product.upc
-                                        }
-                                    </Typography>
-                                }
-                                secondary='UPC'
-                            />
-                        </ListItem>
-                        <Divider variant='middle' />
-                        <ListItem>
-                            <ListItemText 
-                                primary={
-                                    this.props.loadingGet ?
-                                    <Skeleton />
-                                    :
-                                    <Typography variant='body1'>
-                                        {
-                                            isUndefinedOrNullOrEmpty(this.props.product.isbn) ? 'N/A' : this.props.product.isbn
-                                        }
-                                    </Typography>
-                                }
-                                secondary='ISBN'
-                            />
-                        </ListItem>
-                        <Divider variant='middle'/>
-                        {
-                            this.props.product.isDigital ? digitalRender : physicalRender
-                        }
-                    </List>
-                    </Grid>
+            <Grid container
+                direction='row'
+                alignContent='center'
+                alignItems='center'
+                justify='center'
+                spacing={2}
+            >
+                <Grid item xs={12}>
+                    <Typography variant='h3' gutterBottom>
+                        Product Details
+                    </Typography>
                 </Grid>
-            </Paper>
+                <Grid item xs={12}>
+                    <Button variant='text' color='primary' component={RouterLink} to='/products'>
+                        Return to Products
+                    </Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <Paper elevation={6}>
+                        <Grid 
+                            container 
+                            direction='row' 
+                            alignContent='center' 
+                            alignItems='center' 
+                            justify='center'
+                        >
+                            <Grid item xs={12} lg={5}>
+                                {
+                                    this.props.loadingGet || isUndefinedOrNull(this.props.product) || this.props.product === ''? 
+                                    <Skeleton style={{margin: 'auto'}} variant='rect' width='100%' height={300} /> :
+                                    <ProductImageSlider productImages={this.props.product.ProductImages} label={this.props.product.name}/>
+
+                                }
+                            </Grid>
+                            <Grid item xs={12} lg={7}>
+                                <List>
+                                    {
+                                        listItems.map((productField, i) => (
+                                            <React.Fragment key={i}>
+                                                <ListItem>
+                                                    <ListItemText 
+                                                        primary={
+                                                            this.props.loadingGet ?
+                                                            <Skeleton />
+                                                            :
+                                                            <Typography variant='body1'>
+                                                                {this.renderProductField(this.props.product[productField.field], productField.type)}
+                                                            </Typography>
+                                                        }
+                                                        secondary={productField.label}
+                                                    />
+                                                </ListItem>
+                                                <Divider variant='middle' />
+                                            </React.Fragment>
+                                        ))
+                                    }
+                                {
+                                    this.props.product.isDigital ? digitalRender : physicalRender
+                                }
+                                </List>
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                </Grid>
+
+            </Grid>
         )
     }
 }

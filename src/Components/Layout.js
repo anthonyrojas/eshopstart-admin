@@ -13,6 +13,8 @@ import ProductForm from './Product/ProductForm';
 import Product from './Product/Product';
 import ProductList from './Product/ProductList';
 import ProductImagesEditForm from './Product/ProductImagesEditForm';
+import Users from './Users/Users';
+import User from './Users/User';
 class Layout extends Component {
     componentDidMount(){
         if(this.props.authenticated){
@@ -53,6 +55,8 @@ class Layout extends Component {
                 <PrivateRoute path='/products/:id' component={Product} />
                 <PublicRoute path='/login' component={Login} />
                 <PrivateRoute path='/product-image-edit/:id' component={ProductImagesEditForm} />
+                <PrivateRoute path='/users' component={Users} />
+                <PrivateRoute path='/user/:id' component={User} />
             </Switch>
         )
     }

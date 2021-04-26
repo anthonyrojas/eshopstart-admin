@@ -128,7 +128,7 @@ class ProductList extends Component {
                         <DataGrid
                             columns={cols}
                             rows={this.props.products}
-                            rowsPerPageOptions={[3, 25, 50, 100]}
+                            rowsPerPageOptions={[25, 50, 100]}
                             paginationMode='server'
                             //total number of products
                             rowCount={this.props.productsCount}

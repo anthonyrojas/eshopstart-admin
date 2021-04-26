@@ -39,7 +39,6 @@ import {
 import {
     EMPTY_STRING
 } from '../constants';
-import { isUndefinedOrNull } from '../helpers';
 
 const initialState = {
     id: -1,

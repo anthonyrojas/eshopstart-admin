@@ -22,6 +22,13 @@ class PrivateRoute extends Component {
         super(props);
         this.timer = null;
     }
+
+    fetchAccount(){
+        if(this.props.account === ''){
+            this.props.getAccount();
+        }
+    }
+
     componentDidMount(){
         if(Number(this.props.refreshBy) < Date.now()){
             clearTimeout(this.timer);
@@ -31,13 +38,11 @@ class PrivateRoute extends Component {
             clearTimeout(this.timer);
             this.props.refreshLogin(this.props.refreshToken);
             this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
+            this.fetchAccount();
         }else{
             clearTimeout(this.timer);
             this.timer = setTimeout(this.refreshTokens.bind(this), this.props.expiresAt - Date.now() - 3500);
-        }
-
-        if(this.props.account === ''){
-            this.props.getAccount()
+            this.fetchAccount();
         }
     }
     componentDidUpdate(){
