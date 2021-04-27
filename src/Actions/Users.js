@@ -6,7 +6,14 @@ import {
     GET_USERS_SUCCESS,
     GET_USER,
     GET_USER_SUCCESS,
-    GET_USER_FAILURE
+    GET_USER_FAILURE,
+    USER_BIRTH_DATE_CHANGED,
+    USER_EMAIL_CHANGED,
+    USER_FIRST_NAME_CHANGED,
+    USER_LAST_NAME_CHANGED,
+    USER_MIDDLE_INITIAL_CHANGED,
+    USER_PASSWORD_CHANGED,
+    USER_ROLE_CHANGED
 } from '../Types/Users';
 
 export const getUsers = (data) => {
@@ -50,5 +57,54 @@ export const getUser = (data) => {
                 payload: e.response.data
             })
         }
+    }
+}
+
+export const userBirthDateChanged = (data) => {
+    return{
+        type: USER_BIRTH_DATE_CHANGED,
+        payload: data   
+    };
+}
+
+export const userFirstNameChanged = (data) => {
+    return{
+        type: USER_FIRST_NAME_CHANGED,
+        payload: data
+    }
+}
+
+export const userLastNameChanged = (data) => {
+    return{
+        type: USER_LAST_NAME_CHANGED,
+        payload: data
+    }
+}
+
+export const userEmailChanged = (data) => {
+    return{
+        type: USER_EMAIL_CHANGED,
+        payload: data
+    }
+}
+
+export const userMiddleInitialChanged = (data) => {
+    return{
+        type: USER_MIDDLE_INITIAL_CHANGED,
+        payload: data
+    }
+}
+
+export const userRoleChanged = (data) => {
+    return{
+        type: USER_ROLE_CHANGED,
+        payload: data
+    }
+}
+
+export const userPasswordChanged = (data) => {
+    return{
+        type: USER_PASSWORD_CHANGED,
+        payload: data
     }
 }

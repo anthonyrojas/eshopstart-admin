@@ -4,7 +4,14 @@ import {
     GET_USERS_SUCCESS,
     GET_USER,
     GET_USER_FAILURE,
-    GET_USER_SUCCESS
+    GET_USER_SUCCESS,
+    USER_BIRTH_DATE_CHANGED,
+    USER_EMAIL_CHANGED,
+    USER_FIRST_NAME_CHANGED,
+    USER_LAST_NAME_CHANGED,
+    USER_MIDDLE_INITIAL_CHANGED,
+    USER_PASSWORD_CHANGED,
+    USER_ROLE_CHANGED
 } from '../Types/Users';
 const initialState = {
     users: [],
@@ -16,7 +23,15 @@ const initialState = {
     skip: 0,
     loadingUser: false,
     errorExistsGetUser: false,
-    user: ''
+    user: '',
+    birthDate: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    middleInitial: '',
+    password: '',
+    role: '',
+    roles: ['SuperAdmin', 'Admin', 'Customer']
 }
 
 export default (state=initialState, action) => {
@@ -63,6 +78,41 @@ export default (state=initialState, action) => {
                 loadingUser: false,
                 errorExistsGetUser: true,
                 statusMessage: action.payload.statusMessage || 'Unable to load user.'
+            }
+        case USER_BIRTH_DATE_CHANGED:
+            return{
+                ...state,
+                birthDate: action.payload
+            }
+        case USER_FIRST_NAME_CHANGED:
+            return{
+                ...state,
+                firstName: action.payload
+            }
+        case USER_LAST_NAME_CHANGED:
+            return{
+                ...state,
+                lastName: action.payload
+            }
+        case USER_EMAIL_CHANGED:
+            return{
+                ...state,
+                email: action.payload
+            }
+        case USER_ROLE_CHANGED:
+            return{
+                ...state,
+                role: action.payload
+            }
+        case USER_PASSWORD_CHANGED:
+            return{
+                ...state,
+                password: action.payload
+            }
+        case USER_MIDDLE_INITIAL_CHANGED:
+            return{
+                ...state,
+                middleInitial: action.payload
             }
         default: return state;
     }
