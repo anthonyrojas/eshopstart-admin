@@ -6,21 +6,28 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {userRoleChanged} from '../../../Actions/Users'
+import { isUndefinedOrNullOrEmpty } from '../../../helpers';
 
 export class Role extends Component {
-    handleInputChange(e){
+    handleInputChange = (e) =>{
         this.props.userRoleChanged(e.target.value);
     }
     render() {
         return (
-            <FormControl variant='outlined' fullWidth>
+            <FormControl variant='outlined' 
+                fullWidth 
+                //required 
+                error={!isUndefinedOrNullOrEmpty(this.props.errorMessage) && this.props.errorExistsAddUser}
+            >
                 <InputLabel variant='outlined' id='role-select-input-label'>
                     Role
                 </InputLabel>
                 <Select
-                    label='role-select-input-label'
+                    labelId='role-select-input-label'
                     id='role-select-input'
                     value={this.props.role}
+                    variant='outlined'
+                    label='Role'
                     onChange={this.handleInputChange}
                 >
                     {
@@ -29,6 +36,7 @@ export class Role extends Component {
                         ))
                     }
                 </Select>
+                <FormHelperText>{this.props.errorMessage}</FormHelperText>
             </FormControl>
         )
     }
@@ -36,7 +44,9 @@ export class Role extends Component {
 
 const mapStateToProps = (state) => ({
     role: state.users.role,
-    roles: state.users.roles
+    roles: state.users.roles,
+    errorExistsAddUser: state.users.errorExistsAddUser,
+    errorMessage: state.users.errors.role
 })
 
 const mapDispatchToProps = {

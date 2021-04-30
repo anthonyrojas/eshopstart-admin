@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import MomentUtils from '@date-io/moment';
+import DateFnsUtils from '@date-io/date-fns';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
@@ -8,14 +8,16 @@ import {
 import {
     userBirthDateChanged
 } from '../../../Actions/Users'
+import { isUndefinedOrNullOrEmpty } from '../../../helpers';
 
 class BirthDate extends Component {
-    handleDateChanged(date){
+    handleDateChanged(date, e){
+        console.log(date);
         this.props.userBirthDateChanged(date);
     }
     render() {
         return (
-            <MuiPickersUtilsProvider utils={MomentUtils}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker 
                     margin='normal'
                     inputVariant='outlined'
@@ -25,9 +27,13 @@ class BirthDate extends Component {
                     KeyboardButtonProps={{
                         'aria-label': 'change birth date'
                     }}
+                    //required
                     fullWidth
-                    value={this.props.birthDate}
-                    onChange={this.handleDateChanged}
+                    value={this.props.birthdate}
+                    clearable
+                    onChange={this.handleDateChanged.bind(this)}
+                    error={!isUndefinedOrNullOrEmpty(this.props.errorMessage) && this.props.errorExistsAddUser}
+                    helperText={this.props.errorMessage}
                 />
             </MuiPickersUtilsProvider>
         )
@@ -35,7 +41,9 @@ class BirthDate extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    birthDate: state.users.birthDate
+    birthdate: state.users.birthdate,
+    errorExistsAddUser: state.users.errorExistsAddUser,
+    errorMessage: state.users.errors.birthdate
 })
 
 const mapDispatchToProps = {

@@ -42,8 +42,12 @@ const useStyles = makeStyles((theme) => ({
 const Nav = (props) => {
     const classes = useStyles();
     const [productsOpen, setProductsOpen] = React.useState(false);
+    const [usersOpen, setUsersOpen] = React.useState(false);
     const handleProductClick = () => {
       setProductsOpen(!productsOpen);
+    }
+    const handleUsersClick = () => {
+      setUsersOpen(!usersOpen);
     }
     return (
         <Drawer
@@ -95,9 +99,37 @@ const Nav = (props) => {
                         <ListItemText>Categories</ListItemText>
                     </ListItem>
                     <Divider />
-                    <ListItem button component={Link} to='/users'>
+                    <ListItem 
+                      button 
+                      onClick={handleUsersClick}
+                    >
                         <ListItemText>Users</ListItemText>
+                        {productsOpen ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
+                    <Collapse 
+                      in={usersOpen}
+                      timeout='auto'
+                      unmountOnExit
+                    >
+                      <List component='div' disablePadding>
+                        <ListItem
+                          button
+                          component={Link}
+                          selected={props.location.pathname.toLowerCase() === '/users'}
+                          to='/users'
+                        >
+                          <ListItemText>User List</ListItemText>
+                        </ListItem>
+                        <ListItem 
+                          button
+                          component={Link}
+                          selected={props.location.pathname.toLowerCase() === '/users/add'}
+                          to='/users/add'
+                        >
+                          <ListItemText>Add User</ListItemText>
+                        </ListItem>
+                      </List>
+                    </Collapse>
                     <Divider />
                     <ListItem>
                       <LogoutButton />

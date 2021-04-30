@@ -4,9 +4,10 @@ import TextField from '@material-ui/core/TextField';
 import {
     userPasswordChanged
 } from '../../../Actions/Users';
+import { isUndefinedOrNullOrEmpty } from '../../../helpers';
 
 class Password extends Component {
-    handleInputChanged(e){
+    handleInputChanged = (e) =>{
         this.props.userPasswordChanged(e.target.value)
     }
     render() {
@@ -17,13 +18,19 @@ class Password extends Component {
                 fullWidth
                 value={this.props.password}
                 onChange={this.handleInputChanged}
+                //required
+                error={!isUndefinedOrNullOrEmpty(this.props.errorMessage) && this.props.errorExistsAddUser}
+                helperText={this.props.errorMessage}
+                type='password'
             />
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    password: state.users.password
+    password: state.users.password,
+    errorExistsAddUser: state.users.errorExistsAddUser,
+    errorMessage: state.users.errors.password
 })
 
 const mapDispatchToProps = {

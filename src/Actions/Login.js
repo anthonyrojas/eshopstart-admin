@@ -152,7 +152,7 @@ export const getAccount = (data) => {
         }catch(e){
             dispatch({
                 type: GET_ACCOUNT_FAILURE,
-                payload: e.repsonse.data
+                payload: e.response.data
             })
         }
     }

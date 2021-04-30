@@ -13,7 +13,12 @@ import {
     USER_LAST_NAME_CHANGED,
     USER_MIDDLE_INITIAL_CHANGED,
     USER_PASSWORD_CHANGED,
-    USER_ROLE_CHANGED
+    USER_ROLE_CHANGED,
+    ADD_USER,
+    ADD_USER_FAILURE,
+    ADD_USER_SUCCESS,
+    RESET_USER_STATUS_MESSAGE,
+    EDIT_USER_CHANGED
 } from '../Types/Users';
 
 export const getUsers = (data) => {
@@ -107,4 +112,32 @@ export const userPasswordChanged = (data) => {
         type: USER_PASSWORD_CHANGED,
         payload: data
     }
+}
+
+export const addUser = (data) => {
+    return async(dispatch) => {
+        dispatch({
+            type: ADD_USER,
+            payload: true
+        })
+        try{
+            const res = await client.post('/user/admin', data);
+            dispatch({
+                type: ADD_USER_SUCCESS,
+                payload: res.data
+            })
+        }catch(e){
+            dispatch({
+                type: ADD_USER_FAILURE,
+                payload: e.response.data
+            })
+        }
+    }
+}
+
+export const resetUserStatusMessage = (data) => {
+    return({
+        type: RESET_USER_STATUS_MESSAGE,
+        payload: data
+    })
 }

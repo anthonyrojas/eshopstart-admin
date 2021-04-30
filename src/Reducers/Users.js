@@ -11,7 +11,12 @@ import {
     USER_LAST_NAME_CHANGED,
     USER_MIDDLE_INITIAL_CHANGED,
     USER_PASSWORD_CHANGED,
-    USER_ROLE_CHANGED
+    USER_ROLE_CHANGED,
+    ADD_USER,
+    ADD_USER_FAILURE,
+    ADD_USER_SUCCESS,
+    EDIT_USER_CHANGED,
+    RESET_USER_STATUS_MESSAGE
 } from '../Types/Users';
 const initialState = {
     users: [],
@@ -22,16 +27,29 @@ const initialState = {
     limit: 25,
     skip: 0,
     loadingUser: false,
+    savingUser: false,
     errorExistsGetUser: false,
+    errorExistsAddUser: false,
+    errorExistsUpdateUser: false,
     user: '',
-    birthDate: '',
+    birthdate: null,
     email: '',
     firstName: '',
     lastName: '',
     middleInitial: '',
     password: '',
     role: '',
-    roles: ['SuperAdmin', 'Admin', 'Customer']
+    roles: ['SuperAdmin', 'Admin', 'Customer'],
+    editing: false,
+    errors: {
+        birthdate: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        role: ''
+    }
 }
 
 export default (state=initialState, action) => {
@@ -82,7 +100,7 @@ export default (state=initialState, action) => {
         case USER_BIRTH_DATE_CHANGED:
             return{
                 ...state,
-                birthDate: action.payload
+                birthdate: action.payload
             }
         case USER_FIRST_NAME_CHANGED:
             return{
@@ -113,6 +131,50 @@ export default (state=initialState, action) => {
             return{
                 ...state,
                 middleInitial: action.payload
+            }
+        case ADD_USER:
+            return{
+                ...state,
+                savingUser: true,
+                editing: false,
+                statusMessage: '',
+                errorExistsAddUser: false,
+                errors: {
+                    ...initialState.errors
+                }
+            }
+        case ADD_USER_SUCCESS:
+            return{
+                ...state,
+                savingUser: false,
+                users: [action.payload.user, ...state.users],
+                birthdate: null,
+                email: '',
+                firstName: '',
+                lastName: '',
+                middleInitial: '',
+                password: '',
+                role: '',
+                errors: {
+                    ...initialState.errors
+                },
+                statusMessage: action.payload.statusMessage
+            }
+        case ADD_USER_FAILURE:
+            return{
+                ...state,
+                savingUser: false,
+                errorExistsAddUser: true,
+                statusMessage: action.payload.statusMessage,
+                errors: {
+                    ...state.errors,
+                    ...action.payload.errors
+                }
+            }
+        case RESET_USER_STATUS_MESSAGE:
+            return{
+                ...state,
+                statusMessage: ''
             }
         default: return state;
     }
