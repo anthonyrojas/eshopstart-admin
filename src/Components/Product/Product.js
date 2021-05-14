@@ -9,18 +9,21 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import {
-    getProduct,
-    getProductBySlug
+    getProduct
 } from '../../Actions/Product';
+import {
+    getProductInventory
+} from '../../Actions/ProductInventory'
 import {withRouter} from 'react-router-dom';
 import {
     isUndefinedOrNull,
-    isUndefinedOrNullOrEmpty
 } from '../../helpers';
 import ProductImageSlider from './ProductImageSlider';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Button from '@material-ui/core/Button';
-import {Link as RouterLink} from 'react-router-dom'
+import {Link as RouterLink} from 'react-router-dom';
+import ProductInventoryDisplay from '../ProductInventory/ProductInventoryDisplay';
+import ProductInventoryFormDialog from '../ProductInventory/ProductInventoryFormDialog';
 
 const styles = theme => ({
     paper: {
@@ -32,6 +35,7 @@ const styles = theme => ({
 class Product extends Component {
     componentDidMount(){
         this.props.getProduct({id: this.props.match.params.id});
+        this.props.getProductInventory({productId: this.props.match.params.id});
     }
     renderProductField(val, fieldType=null){
         if(isUndefinedOrNull(val)){
@@ -53,7 +57,7 @@ class Product extends Component {
         }
     }
     render() {
-        const {classes} = this.props;
+        //const {classes} = this.props;
         const listItems = [
             {
                 field: 'id',
@@ -195,6 +199,7 @@ class Product extends Component {
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
+                    <ProductInventoryFormDialog />
                     <Paper elevation={6}>
                         <Grid 
                             container 
@@ -233,9 +238,24 @@ class Product extends Component {
                                             </React.Fragment>
                                         ))
                                     }
-                                {
-                                    this.props.product.isDigital ? digitalRender : physicalRender
-                                }
+                                    {
+                                        this.props.product.isDigital ? digitalRender : physicalRender
+                                    }
+                                    <ProductInventoryDisplay />
+                                    <ListItem>
+                                        <ListItemText
+                                            primary={
+                                                <Button
+                                                    variant='text' 
+                                                    color='primary' 
+                                                    component={RouterLink}
+                                                    to={`/products/${this.props.match.params.id}/edit`}
+                                                >
+                                                    Edit Product
+                                                </Button>
+                                            }
+                                        />
+                                    </ListItem>
                                 </List>
                             </Grid>
                         </Grid>
@@ -254,7 +274,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
     getProduct,
-    getProductBySlug
+    getProductInventory
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withStyles(styles)(Product)))

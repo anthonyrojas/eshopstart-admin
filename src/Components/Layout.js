@@ -53,7 +53,8 @@ class Layout extends Component {
                 <PrivateRoute exact path='/' component={Category} />
                 <PrivateRoute exact path='/products' component={ProductList} />
                 <PrivateRoute exact path='/product' component={ProductForm} />
-                <PrivateRoute path='/products/:id' component={Product} />
+                <PrivateRoute exact path='/products/:id' component={Product} />
+                <PrivateRoute exact path='/products/:id/edit' component={ProductForm} />
                 <PublicRoute path='/login' component={Login} />
                 <PrivateRoute path='/product-image-edit/:id' component={ProductImagesEditForm} />
                 <PrivateRoute exact path='/users' component={Users} />

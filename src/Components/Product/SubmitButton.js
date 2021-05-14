@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import {withRouter} from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import {
     addProduct,
     updateProduct,
     cancelEditProduct
-} from '../../Actions/Product'
+} from '../../Actions/Product';
 
 class SubmitButton extends Component {
     onClickSubmitBtn = (e) => {
@@ -37,7 +38,7 @@ class SubmitButton extends Component {
             //updating a product
             this.props.updateProduct({
                 id: this.props.id,
-                ...data
+                ...data.product
             })
         }else{
             this.props.addProduct(data);
@@ -45,6 +46,7 @@ class SubmitButton extends Component {
     }
     onClickCancelEditBtn = (e) => {
         this.props.cancelEditProduct(false);
+        this.props.history.push(`/products/${this.props.match.params.id}`);
     }
     render() {
         const msg = this.props.editing ? 'Update Product' : 'Add Product';
@@ -67,7 +69,7 @@ class SubmitButton extends Component {
                             color='secondary'
                             variant='contained'
                             disabled={this.props.loadingUpdate || this.props.loadingAdd}
-                            onClick={this.cancelEditProduct.bind(this)}
+                            onClick={this.onClickCancelEditBtn.bind(this)}
                         >
                             Cancel
                         </Button>
@@ -109,4 +111,4 @@ const mapDispatchToProps = {
     cancelEditProduct
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubmitButton);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SubmitButton));

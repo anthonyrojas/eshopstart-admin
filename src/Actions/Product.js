@@ -336,10 +336,15 @@ export const deleteProduct = (data) => {
 }
 
 export const editProduct = (data) => {
-    return({
-        type: EDIT_PRODUCT,
-        payload: data
-    })
+    return async(dispatch) => {
+        await Promise.all([
+            dispatch(getProduct(data))
+        ]);
+        return dispatch({
+            type: EDIT_PRODUCT,
+            payload: data
+        })
+    }
 }
 
 export const cancelEditProduct = (data) => {

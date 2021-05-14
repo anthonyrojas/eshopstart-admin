@@ -27,13 +27,14 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import { isUndefinedOrNullOrEmpty } from '../../helpers';
 import {
-    resetStatusMessage
+    resetStatusMessage,
+    editProduct,
+    getProduct
 } from '../../Actions/Product';
 import Button from '@material-ui/core/Button';
 import ProductImage from './ProductFormFields/ProductImage';
 import ProductImageLabel from './ProductFormFields/ImageLabel';
-import Divider from '@material-ui/core/Divider'
-
+import {withRouter, Link as RouterLink} from 'react-router-dom'
 
 const styles = theme => ({
     paper: {
@@ -48,6 +49,13 @@ const styles = theme => ({
 })
 
 class ProductForm extends Component {
+    componentDidMount(){
+        if(this.props.match.params.id !== undefined || this.props.location.pathname.includes('edit')){
+            if(!this.props.editing){
+                this.props.editProduct({id: this.props.match.params.id});
+            }
+        }
+    }
     resetStatusMessage(data){
         this.props.resetStatusMessage(false);
     }
@@ -103,12 +111,18 @@ class ProductForm extends Component {
                                 severity={this.props.errorExists ? 'error' : 'success'}
                                 action={
                                     <React.Fragment>
-                                        <Button
-                                            color='inherit'
-                                            variant='outlined'
-                                        >
-                                            View
-                                        </Button>
+                                        {
+                                            this.props.errorExists ? 
+                                            null:
+                                            <Button
+                                                color='inherit'
+                                                variant='outlined'
+                                                to={`/products/${this.props.productId}`}
+                                                component={RouterLink}
+                                            >
+                                                View
+                                            </Button>
+                                        }
                                         &nbsp;
                                         <IconButton
                                             aria-label='close'
@@ -157,12 +171,19 @@ class ProductForm extends Component {
                     {
                         digitalRender
                     }
-                    <Grid item xs={12}>
-                        <ProductImage />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <ProductImageLabel />
-                    </Grid>
+                    {
+                        this.props.editing ? 
+                        null
+                        :
+                        <React.Fragment>
+                            <Grid item xs={12}>
+                                <ProductImage />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <ProductImageLabel />
+                            </Grid>
+                        </React.Fragment>
+                    }
                     <Grid item xs={12} style={{textAlign: 'center'}}>
                         <SubmitButton />
                     </Grid>
@@ -176,11 +197,14 @@ const mapStateToProps = (state) => ({
     isDigital: state.product.isDigital,
     editing: state.product.editing,
     statusMessage: state.product.statusMessage,
-    errorExists: state.product.errorExists
+    errorExists: state.product.errorExists,
+    productId: state.product.id
 })
 
 const mapDispatchToProps = {
-    resetStatusMessage
+    resetStatusMessage,
+    getProduct,
+    editProduct
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProductForm))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(ProductForm)))

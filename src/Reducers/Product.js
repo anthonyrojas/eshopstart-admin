@@ -227,8 +227,8 @@ export default (state=initialState, action) => {
                 ...state,
                 errorExists: false,
                 statusMessage: action.payload.statusMessage,
-                product: action.payload.product,
-                id: -1,
+                product: initialState.product,
+                id: action.payload.product.id,
                 name: EMPTY_STRING,
                 description: EMPTY_STRING,
                 price: 0.00,
@@ -288,9 +288,9 @@ export default (state=initialState, action) => {
                 },
                 loadingUpdate: false,
                 products: state.products,
-                product: action.payload.product,
+                product: initialState.product,
                 statusMessage: action.payload.statusMessage,
-                id: -1,
+                id: action.payload.product.id,
                 name: EMPTY_STRING,
                 description: EMPTY_STRING,
                 price: 0.00,
@@ -332,12 +332,43 @@ export default (state=initialState, action) => {
         case EDIT_PRODUCT:
             return{
                 ...state,
+                name: state.product.name,
+                description: state.product.description,
+                id: state.product.id,
+                price: state.product.price,
+                isDeliverable: state.product.isDeliverable,
+                isDigital: state.product.isDigital,
+                downloadsPermitted: state.product.downloadsPermitted,
+                weight: state.product.weight,
+                height: state.product.height,
+                width: state.product.width,
+                length: state.product.length,
+                upc: state.product.upc,
+                sku: state.product.sku || '',
+                isbn: state.product.isbn,
+                isActive: state.product.isActive,
                 editing: true
             }
         case CANCEL_EDIT_PRODUCT:
             return{
                 ...state,
-                editing: false
+                editing: false,
+                name: initialState.name,
+                description: initialState.description,
+                id: initialState.id,
+                price: initialState.price,
+                isDeliverable: initialState.isDeliverable,
+                isDigital: initialState.isDigital,
+                downloadsPermitted: initialState.downloadsPermitted,
+                weight: initialState.weight,
+                height: initialState.height,
+                width: initialState.width,
+                length: initialState.length,
+                upc: initialState.upc,
+                sku: initialState.sku,
+                isbn: initialState.isbn,
+                isActive: initialState.isActive,
+                product: ''
             }
         case PRODUCT_FILE_CHANGED:
             return{
