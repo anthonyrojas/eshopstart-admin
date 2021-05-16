@@ -29,7 +29,8 @@ import { isUndefinedOrNullOrEmpty } from '../../helpers';
 import {
     resetStatusMessage,
     editProduct,
-    getProduct
+    getProduct,
+    cancelEditProduct
 } from '../../Actions/Product';
 import Button from '@material-ui/core/Button';
 import ProductImage from './ProductFormFields/ProductImage';
@@ -50,10 +51,19 @@ const styles = theme => ({
 
 class ProductForm extends Component {
     componentDidMount(){
-        if(this.props.match.params.id !== undefined || this.props.location.pathname.includes('edit')){
+        this.props.resetStatusMessage(false);
+        if(this.props.match.params.id !== undefined && this.props.location.pathname.includes('edit')){
             if(!this.props.editing){
                 this.props.editProduct({id: this.props.match.params.id});
             }
+        }else{
+            //reset any update product values
+            this.props.cancelEditProduct();
+        }
+    }
+    componentDidUpdate(prevProps){
+        if(prevProps.editing && !this.props.match.params.id){
+            this.props.cancelEditProduct();
         }
     }
     resetStatusMessage(data){
@@ -204,7 +214,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
     resetStatusMessage,
     getProduct,
-    editProduct
+    editProduct,
+    cancelEditProduct
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(ProductForm)))
