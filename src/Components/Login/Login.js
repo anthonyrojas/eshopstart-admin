@@ -11,6 +11,8 @@ import EmailInput from './EmailInput';
 import PasswordInput from './PasswordInput';
 import {withStyles} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
+import { isUndefinedOrNullOrEmpty } from '../../helpers';
 
 const styles = theme => ({
     paper: {
@@ -45,6 +47,17 @@ class Login extends Component {
                         alignItems='center'
                         component='form'
                     >
+                        <Grid item xs={12}>
+                            {
+                                isUndefinedOrNullOrEmpty(this.props.statusMessage) ?
+                                null
+                                :
+                                <Alert variant='filled' color={this.props.errorExists ? 'error' : 'info'}>
+                                    {this.props.statusMessage}
+                                </Alert>
+
+                            }
+                        </Grid>
                         <Grid item xs={12}>
                             <Typography variant='h4' align='center'>Login</Typography>
                         </Grid>

@@ -16,6 +16,8 @@ import ProductImagesEditForm from './Product/ProductImagesEditForm';
 import Users from './Users/Users';
 import User from './Users/User';
 import UserForm from './Users/UserForm';
+import Orders from './Order/Orders';
+import Order from './Order/Order';
 class Layout extends Component {
     componentDidMount(){
         if(this.props.authenticated){
@@ -60,6 +62,8 @@ class Layout extends Component {
                 <PrivateRoute exact path='/users' component={Users} />
                 <PrivateRoute exact path='/users/add' component={UserForm} />
                 <PrivateRoute path='/user/:id' component={User} />
+                <PrivateRoute exact path='/orders' component={Orders}/>
+                <PrivateRoute exact path='/order/:id' component={Order} />
             </Switch>
         )
     }

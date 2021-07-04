@@ -79,7 +79,7 @@ class User extends Component {
             >
                 <Grid item xs={12}>
                     <Typography variant='h3'>
-                        User Details
+                        User Overview
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>

@@ -49,6 +49,47 @@ const Nav = (props) => {
     const handleUsersClick = () => {
       setUsersOpen(!usersOpen);
     }
+    const productsSubList = (
+      <List component='div' disablePadding>
+        <ListItem
+          button
+          component={Link}
+          selected={props.location.pathname.toLowerCase() === '/products'}
+          to='/products'
+        >
+          <ListItemText>Product List</ListItemText>
+        </ListItem>
+        <ListItem 
+          button
+          component={Link}
+          selected={props.location.pathname.toLowerCase() === '/product'}
+          to='/product'
+        >
+          <ListItemText>Add Product</ListItemText>
+        </ListItem>
+      </List>
+    );
+
+    const usersSubList = (
+      <List component='div' disablePadding>
+        <ListItem
+          button
+          component={Link}
+          selected={props.location.pathname.toLowerCase() === '/users'}
+          to='/users'
+        >
+          <ListItemText>User List</ListItemText>
+        </ListItem>
+        <ListItem 
+          button
+          component={Link}
+          selected={props.location.pathname.toLowerCase() === '/users/add'}
+          to='/users/add'
+        >
+          <ListItemText>Add User</ListItemText>
+        </ListItem>
+      </List>
+    );
     return (
         <Drawer
             className={classes.drawer}
@@ -75,24 +116,7 @@ const Nav = (props) => {
                       timeout='auto'
                       unmountOnExit
                     >
-                      <List component='div' disablePadding>
-                        <ListItem
-                          button
-                          component={Link}
-                          selected={props.location.pathname.toLowerCase() === '/products'}
-                          to='/products'
-                        >
-                          <ListItemText>Product List</ListItemText>
-                        </ListItem>
-                        <ListItem 
-                          button
-                          component={Link}
-                          selected={props.location.pathname.toLowerCase() === '/product'}
-                          to='/product'
-                        >
-                          <ListItemText>Add Product</ListItemText>
-                        </ListItem>
-                      </List>
+                      {productsSubList}
                     </Collapse>
                     <Divider />
                     <ListItem button component={Link} to='/'>
@@ -111,25 +135,16 @@ const Nav = (props) => {
                       timeout='auto'
                       unmountOnExit
                     >
-                      <List component='div' disablePadding>
-                        <ListItem
-                          button
-                          component={Link}
-                          selected={props.location.pathname.toLowerCase() === '/users'}
-                          to='/users'
-                        >
-                          <ListItemText>User List</ListItemText>
-                        </ListItem>
-                        <ListItem 
-                          button
-                          component={Link}
-                          selected={props.location.pathname.toLowerCase() === '/users/add'}
-                          to='/users/add'
-                        >
-                          <ListItemText>Add User</ListItemText>
-                        </ListItem>
-                      </List>
+                      {usersSubList}
                     </Collapse>
+                    <Divider />
+                    <ListItem
+                      button
+                      component={Link}
+                      to='/orders'
+                    >
+                      <ListItemText>Orders</ListItemText>
+                    </ListItem>
                     <Divider />
                     <ListItem>
                       <LogoutButton />

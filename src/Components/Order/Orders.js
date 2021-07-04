@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 import {DataGrid} from '@material-ui/data-grid';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import {withStyles} from '@material-ui/core/styles'
-import {
-    getProducts
-} from '../../Actions/Product';
-import { Typography } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import {Link} from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+import {withStyles} from '@material-ui/core/styles';
+import {Link as RouterLink} from 'react-router-dom';
+import {getOrders} from '../../Actions/Order';
 
 const styles = theme => ({
     dataGrid: {
@@ -21,25 +19,25 @@ const styles = theme => ({
     }
 });
 
-class ProductList extends Component {
+
+class Orders extends Component {
     componentDidMount(){
-        this.props.getProducts({
+        this.props.getOrders({
             limit: this.props.limit,
             skip: this.props.skip
-        });
+        })
     }
     filterModelChanged = (e) => {
-        this.props.getProducts({
+        this.props.getOrders({
             limit: this.props.limit,
-            skip: this.props.skip,
-            orderBy: e.sortModel[0] ? e.sortModel[0].field : '',
-            sort: e.sortModel[0] ? e.sortModel[0].sort : ''
-        });
+            skip: this.props.skip
+        })
     }
+
     pageChanged = (e) => {
-        //check to make sure page value is changing to prevent rerender and subsequent api calls
+        //check to make sure page vlue is changing to prevent rerender and subsquent api calls
         if(this.props.skip !== (e.page)*this.props.limit){
-            this.props.getProducts({
+            this.props.getOrders({
                 limit: this.props.limit,
                 skip: (e.page)*this.props.limit,
                 orderBy: this.props.orderBy,
@@ -47,34 +45,36 @@ class ProductList extends Component {
             })
         }
     }
+
     pageSizeChanged = (e) => {
-        let page = this.props.skip;
-        while(this.props.productsCount < (page * e.pageSize) && page > 0){
-            page -= 1;
+        let nextSkip = this.props.skip;
+        while(this.props.productsCount < (nextSkip * e.page) && nextSkip > 0){
+            nextSkip -= 1;
         }
-        //check to make sure next page size is different to prevent rerender and subsequent api call
+        //check to make sure the next page size is different to prevent rerender and subsequent api call
         if(this.props.limit !== e.pageSize){
-            this.props.getProducts({
+            this.props.getOrders({
                 limit: e.pageSize,
-                skip: page,
+                skip: nextSkip,
                 orderBy: this.props.orderBy,
                 sort: this.props.sort
             })
         }
     }
+
     render() {
         const cols = [
             {
                 field: 'id',
                 headerName: 'ID',
                 type: 'number',
-                width: 100,
+                width: 125,
                 renderCell: (params) => (
                     <strong>
                         <IconButton
                             color='primary'
-                            component={Link}
-                            to={`/products/${params.value}`}
+                            component={RouterLink}
+                            to={`/orders/${params.value}`}
                         >
                             <VisibilityIcon />
                         </IconButton>
@@ -83,64 +83,77 @@ class ProductList extends Component {
                 )
             },
             {
-                field: 'name',
-                headerName: 'Name',
-                width: 350,
-            },
-            {
-                field: 'price',
-                headerName: 'Price',
+                field: 'total',
+                headerName: 'Total',
+                type: 'number',
                 width: 150,
-                type: 'number'
+                renderCell: (params) => (
+                    <>${params.value}</>
+                )
             },
             {
-                field: 'slug',
-                headerName: 'Slug',
-                width: 300,
+                field: 'stripePaymentId',
+                headerName: 'Stripe ID',
+                width: 200
             },
             {
-                field: 'isActive',
-                headerName: 'Active',
-                width: 150
+                field: 'paymentStatus',
+                headerName: 'Payment Status',
+                width: 200
+            },
+            {
+                field: 'userId',
+                headerName: 'User Id',
+                type: 'number',
+                width: 125
+            },
+            {
+                field: 'createdAt',
+                headerName: 'Placed On',
+                type: 'date',
+                width: 200
+            },
+            {
+                field: 'updatedAt',
+                headerName: 'Last Updated',
+                type: 'date',
+                width: 200
             }
         ]
         const {classes} = this.props;
         return (
-            <Grid 
+            <Grid
                 container
                 direction='row'
                 alignContent='center'
                 alignItems='center'
                 justify='center'
+                spacing={2}
             >
                 <Grid item xs={12}>
                     <Typography align='center' variant='h3' gutterBottom>
-                        Products
+                        Orders
                     </Typography>
                 </Grid>
                 <Paper
                     elevation={4}
                     style={{width: '100%'}}
                 >
-                    <Grid item xs={12} 
-                        className={classes.dataGrid}
-                    >
+                    <Grid item xs={12} className={classes.dataGrid}>
                         <DataGrid
                             columns={cols}
-                            rows={this.props.products}
-                            rowsPerPageOptions={[25, 50, 100]}
+                            rows={this.props.orders}
+                            rowsPerPageOptions={[50, 100, 150]}
                             paginationMode='server'
-                            //total number of products
-                            rowCount={this.props.productsCount}
-                            //number of rows per page
+                            rowCount={this.props.ordersCount}
                             pageSize={this.props.limit}
                             page={(this.props.skip/this.props.limit)}
                             onPageSizeChange={this.pageSizeChanged.bind(this)}
                             onSortModelChange={this.filterModelChanged.bind(this)}
                             onPageChange={this.pageChanged.bind(this)}
                             disableSelectionOnClick
-                            pagination={!this.props.loadingGet}
-                            loading={this.props.loadingGet}
+                            pagination={!this.props.loadingOrders}
+                            loading={this.props.loadingOrders}
                         />
                     </Grid>
                 </Paper>
@@ -150,17 +163,17 @@ class ProductList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    loadingGet: state.product.loadingGet,
-    products: state.product.products,
-    productsCount: state.product.rowCount,
-    limit: state.product.limit,
-    skip: state.product.skip,
-    orderBy: state.product.orderBy,
-    sort: state.product.sort
+    orders: state.order.orders,
+    loadingOrders: state.order.loadingOrders,
+    limit: state.order.limit,
+    ordersCount: state.order.rowCount,
+    skip: state.order.skip,
+    orderBy: state.order.orderBy,
+    sort: state.order.sort
 })
 
 const mapDispatchToProps = {
-    getProducts
+    getOrders
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProductList))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Orders));

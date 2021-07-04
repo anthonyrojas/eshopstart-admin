@@ -190,7 +190,7 @@ class Product extends Component {
             >
                 <Grid item xs={12}>
                     <Typography variant='h3' gutterBottom>
-                        Product Details
+                        Product Overview
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
