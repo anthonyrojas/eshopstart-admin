@@ -9,14 +9,15 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import {
-    getProduct
+    getProduct,
+    downloadDigitalProduct
 } from '../../Actions/Product';
 import {
     getProductInventory
 } from '../../Actions/ProductInventory'
 import {withRouter} from 'react-router-dom';
 import {
-    isUndefinedOrNull,
+    isUndefinedOrNull, isUndefinedOrNullOrEmpty,
 } from '../../helpers';
 import ProductImageSlider from './ProductImageSlider';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -24,6 +25,7 @@ import Button from '@material-ui/core/Button';
 import {Link as RouterLink} from 'react-router-dom';
 import ProductInventoryDisplay from '../ProductInventory/ProductInventoryDisplay';
 import ProductInventoryFormDialog from '../ProductInventory/ProductInventoryFormDialog';
+import Alert from '@material-ui/lab/Alert';
 
 const styles = theme => ({
     paper: {
@@ -36,6 +38,12 @@ class Product extends Component {
     componentDidMount(){
         this.props.getProduct({id: this.props.match.params.id});
         this.props.getProductInventory({productId: this.props.match.params.id});
+    }
+    onClickDownloadFile(){
+        this.props.downloadDigitalProduct({
+            productId: this.props.match.params.id,
+            digitalPath: this.props.product.digitalPath
+        });
     }
     renderProductField(val, fieldType=null){
         if(isUndefinedOrNull(val)){
@@ -122,12 +130,12 @@ class Product extends Component {
                 <ListItem>
                     <ListItemText 
                         primary={
-                            this.props.loadingGet ? 
+                            this.props.loadingGet || this.props.downloadingDigital? 
                             <Skeleton />
                             :
-                            <Typography variant='body1'>
+                            <Button variant='text' color='primary' onClick={this.onClickDownloadFile.bind(this)}>
                                 {this.props.product.digitalPath}
-                            </Typography>
+                            </Button>
                         }
                         secondary='Digital Path'
                     />
@@ -198,6 +206,14 @@ class Product extends Component {
                         Return to Products
                     </Button>
                 </Grid>
+                {
+                    this.props.errorExists && !isUndefinedOrNullOrEmpty(this.props.statusMessage) ?
+                    <Grid item xs={12}>
+                        <Alert variant='filled' severity='error'>{this.props.statusMessage}</Alert>
+                    </Grid>
+                    :
+                    null
+                }
                 <Grid item xs={12}>
                     <ProductInventoryFormDialog />
                     <Paper elevation={6}>
@@ -269,12 +285,16 @@ class Product extends Component {
 
 const mapStateToProps = (state) => ({
     product: state.product.product,
-    loadingGet: state.product.loadingGet
+    loadingGet: state.product.loadingGet,
+    downloadingDigital: state.product.downloadingDigital,
+    errorExists: state.product.errorExists,
+    statusMessage: state.product.statusMessage
 })
 
 const mapDispatchToProps = {
     getProduct,
-    getProductInventory
+    getProductInventory,
+    downloadDigitalProduct
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withStyles(styles)(Product)))

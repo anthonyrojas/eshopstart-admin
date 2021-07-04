@@ -31,7 +31,10 @@ import {
     EDIT_PRODUCT,
     CANCEL_EDIT_PRODUCT,
     PRODUCT_FILE_CHANGED,
-    PRODUCT_RESET_STATUS_MESSAGE
+    PRODUCT_RESET_STATUS_MESSAGE,
+    DIGITAL_PRODUCT_DOWNLOAD,
+    DIGITAL_PRODUCT_DOWNLOAD_FAILURE,
+    DIGITAL_PRODUCT_DOWNLOAD_SUCCESS
 } from '../Types/Product';
 import {
     PRODUCT_IMAGE_ORDER_UPDATE_SUCCESS, PRODUCT_IMAGE_UPLOAD_SUCCESS
@@ -87,7 +90,8 @@ const initialState = {
     orderBy: 'id',
     sort: 'asc',
     product: EMPTY_STRING,
-    editing: false
+    editing: false,
+    downloadingDigital: false
 }
 export default (state=initialState, action) => {
     switch(action.type){
@@ -399,6 +403,25 @@ export default (state=initialState, action) => {
                         action.payload.productImage
                     ]
                 }
+            }
+        case DIGITAL_PRODUCT_DOWNLOAD:
+            return{
+                ...state,
+                downloadingDigital: true,
+                errorExists: false
+            }
+        case DIGITAL_PRODUCT_DOWNLOAD_SUCCESS:
+            return{
+                ...state,
+                downloadingDigital: false,
+                errorExists: false
+            }
+        case DIGITAL_PRODUCT_DOWNLOAD_FAILURE:
+            return{
+                ...state,
+                downloadingDigital: false,
+                errorExists: true,
+                statusMessage: action.payload.statusMessage
             }
         default: return state;
     }

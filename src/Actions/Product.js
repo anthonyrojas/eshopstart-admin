@@ -31,7 +31,10 @@ import {
     EDIT_PRODUCT,
     CANCEL_EDIT_PRODUCT,
     PRODUCT_FILE_CHANGED,
-    PRODUCT_RESET_STATUS_MESSAGE
+    PRODUCT_RESET_STATUS_MESSAGE,
+    DIGITAL_PRODUCT_DOWNLOAD,
+    DIGITAL_PRODUCT_DOWNLOAD_FAILURE,
+    DIGITAL_PRODUCT_DOWNLOAD_SUCCESS
 } from '../Types/Product';
 import client from '../axiosClient';
 import {
@@ -366,4 +369,35 @@ export const resetStatusMessage = (data) =>{
         type: PRODUCT_RESET_STATUS_MESSAGE,
         payload: data
     })
+}
+
+export const downloadDigitalProduct = (data) => {
+    return async(dispatch) => {
+        dispatch({
+            type: DIGITAL_PRODUCT_DOWNLOAD,
+            payload: data
+        });
+        try{
+            const res = await client.get(`/product/download/${data.productId}`, {
+                responseType: 'blob'
+            });
+            const download = new Blob([res.data], {
+                type: res.data.type
+            });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(download);
+            const digitalPath = data.digitalPath.split('/');
+            link.download = digitalPath[digitalPath.length-1];
+            link.click();
+            dispatch({
+                type: DIGITAL_PRODUCT_DOWNLOAD_SUCCESS,
+                payload: res.data
+            })
+        }catch(e){
+            dispatch({
+                type: DIGITAL_PRODUCT_DOWNLOAD_FAILURE,
+                payload: e.response.data
+            })
+        }
+    }
 }
