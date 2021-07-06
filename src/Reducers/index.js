@@ -6,6 +6,7 @@ import ProductImage from './ProductImage';
 import Users from './Users';
 import ProductInventory from './ProductInventory';
 import Order from './Order';
+import ShippingAddress from './ShippingAddress';
 export default combineReducers({
     category: Category,
     login: Login,
@@ -13,5 +14,6 @@ export default combineReducers({
     productImage: ProductImage,
     users: Users,
     productInventory: ProductInventory,
-    order: Order
+    order: Order,
+    shippingAddress: ShippingAddress
 });

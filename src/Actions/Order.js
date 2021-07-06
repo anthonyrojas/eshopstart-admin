@@ -25,7 +25,7 @@ export const getOrders = (data) => {
             if(isUndefinedOrNull(data.userId)){
                 res = await client.get(`/order/all${queryString}&view=all`);
             }else{
-                res = await client.get(`/order/all${data.userId}${queryString}`);
+                res = await client.get(`/order/all/${data.userId}${queryString}`);
             }
             dispatch({
                 type: GET_ORDERS_SUCCESS,
