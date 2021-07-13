@@ -6,7 +6,10 @@ import {
     GET_ORDERS,
     GET_ORDERS_FAILURE,
     GET_ORDERS_SUCCESS,
-    ORDER_RESET_STATUS_MESSAGE
+    ORDER_RESET_STATUS_MESSAGE,
+    UPDATE_ORDER_PRODUCT_STATUS,
+    UPDATE_ORDER_PRODUCT_STATUS_FAILURE,
+    UPDATE_ORDER_PRODUCT_STATUS_SUCCESS
 } from '../Types/Order';
 const initialState = {
     loadingOrders: false,
@@ -21,7 +24,8 @@ const initialState = {
     skip: 0,
     orderBy: 'id',
     sort: 'desc',
-    rowCount: 0
+    rowCount: 0,
+    updatingOPStatus: false
 };
 export default (state=initialState, action) => {
     switch(action.type){
@@ -74,6 +78,29 @@ export default (state=initialState, action) => {
                 order: initialState.order,
                 errorExists: true,
                 statusMessage: action.payload.statusMessage
+            }
+        case UPDATE_ORDER_PRODUCT_STATUS:
+            return{
+                ...state,
+                updatingOPStatus: true
+            }
+        case UPDATE_ORDER_PRODUCT_STATUS_SUCCESS:
+            let products = state.order.Products;
+            const productIndex = products.findIndex(p => p.id === action.payload.productId);
+            const product = products[productIndex].OrderProduct.orderStatus = action.payload.orderProduct.orderStatus;
+            products[productIndex] = product;
+            return{
+                ...state,
+                updatingOPStatus: false,
+                order: {
+                    ...state.order,
+                    Products: products
+                }
+            }
+        case UPDATE_ORDER_PRODUCT_STATUS_FAILURE:
+            return{
+                ...state,
+                updatingOPStatus: false
             }
         default: return state;
     }

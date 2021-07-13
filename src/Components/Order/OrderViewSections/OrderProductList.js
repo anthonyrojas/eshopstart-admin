@@ -6,6 +6,7 @@ import {DataGrid} from '@material-ui/data-grid';
 import {makeStyles} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import OrderStatusCell from './OrderStatusCell';
 import {Link} from 'react-router-dom'
 import { isUndefinedOrNull } from '../../../helpers';
 
@@ -19,8 +20,20 @@ const useStyles = makeStyles({
     cardHeader: {
         background: '#111',
         padding: 10
+    },
+    fulfilledChip: {
+        backgroundColor: '#2196f3'
+    },
+    processingChip: {
+        backgroundColor: '#ff9800',
+        color: '#000'
+    },
+    deliveredChip: {
+        backgroundColor: '#4caf50',
+        color: '#000'
     }
 })
+
 export default function OrderProductList(props) {
     const classes = useStyles();
     const loadingOrder = useSelector(state => state.order.loadingOrder);
@@ -81,6 +94,13 @@ export default function OrderProductList(props) {
             width: 150,
             valueGetter: (params) => isUndefinedOrNull(params.row.OrderProduct.downloadsRemaining) ? 0 : params.row.OrderProduct.downloadsRemaining
         },
+        {
+            field: 'orderStatus',
+            headerName: 'Status',
+            width: 150,
+            editable: true,
+            valueGetter: (params) => <OrderStatusCell {...params} />
+        }
     ]
     return (
         <Grid 

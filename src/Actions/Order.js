@@ -6,7 +6,10 @@ import {
     GET_ORDERS_FAILURE,
     GET_ORDERS_SUCCESS,
     GET_ORDER_FAILURE,
-    GET_ORDER_SUCCESS
+    GET_ORDER_SUCCESS,
+    UPDATE_ORDER_PRODUCT_STATUS,
+    UPDATE_ORDER_PRODUCT_STATUS_FAILURE,
+    UPDATE_ORDER_PRODUCT_STATUS_SUCCESS
 } from '../Types/Order';
 
 export const getOrders = (data) => {
@@ -55,6 +58,32 @@ export const getOrder = (data) => {
         }catch(e){
             dispatch({
                 type: GET_ORDER_FAILURE,
+                payload: e.response.data
+            })
+        }
+    }
+}
+
+export const updateOrderProductStatus = (data) => {
+    return async(dispatch) => {
+        dispatch({
+            type: UPDATE_ORDER_PRODUCT_STATUS,
+            payload: data
+        });
+        try{
+            const res = await client.put(`/order-product/${data.id}`, {
+                orderStatus: data.orderStatus
+            });
+            dispatch({
+                type: UPDATE_ORDER_PRODUCT_STATUS_SUCCESS,
+                payload: {
+                    ...res.data,
+                    productId: data.productId
+                }
+            })
+        }catch(e){
+            dispatch({
+                type: UPDATE_ORDER_PRODUCT_STATUS_FAILURE,
                 payload: e.response.data
             })
         }

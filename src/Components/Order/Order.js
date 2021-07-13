@@ -121,6 +121,7 @@ order: {
             createdAt: '06/01/2021',
             updatedAt: '06/01/2021',
             OrderProduct: {
+                id: 0,
                 orderStatus: 'Completed',
                 amount: 2,
                 downloadsRemaining: 0,
