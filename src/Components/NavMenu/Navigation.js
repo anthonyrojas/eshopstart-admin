@@ -11,6 +11,7 @@ import {Link, withRouter} from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import { useSelector } from 'react-redux';
 
 const drawerWidth = 240;
 
@@ -43,6 +44,7 @@ const Nav = (props) => {
     const classes = useStyles();
     const [productsOpen, setProductsOpen] = React.useState(false);
     const [usersOpen, setUsersOpen] = React.useState(false);
+    const account = useSelector(state => state.login.account);
     const handleProductClick = () => {
       setProductsOpen(!productsOpen);
     }
@@ -144,6 +146,15 @@ const Nav = (props) => {
                       to='/orders'
                     >
                       <ListItemText>Orders</ListItemText>
+                    </ListItem>
+                    <Divider />
+                    <ListItem
+                      button
+                      component={Link}
+                      to='/app-settings'
+                      disabled={account.role !== 'SuperAdmin'}
+                    >
+                      <ListItemText>App Settings</ListItemText>
                     </ListItem>
                     <Divider />
                     <ListItem>

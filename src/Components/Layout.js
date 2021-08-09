@@ -18,6 +18,7 @@ import User from './Users/User';
 import UserForm from './Users/UserForm';
 import Orders from './Order/Orders';
 import Order from './Order/Order';
+import AppSettings from './AppSetting/AppSettings';
 class Layout extends Component {
     componentDidMount(){
         if(this.props.authenticated){
@@ -64,6 +65,7 @@ class Layout extends Component {
                 <PrivateRoute path='/user/:id' component={User} />
                 <PrivateRoute exact path='/orders' component={Orders}/>
                 <PrivateRoute exact path='/order/:id' component={Order} />
+                <PrivateRoute exact path='/app-settings' component={AppSettings} />
             </Switch>
         )
     }
